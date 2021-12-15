@@ -1,0 +1,6 @@
+﻿@namespace FightGame
+
+@foreach(var bulletConfig in bulletConfigList)
+{
+	<Bullet BulletConfig="bulletConfig" @ref="@bulletMap[bulletConfig]" />
+}

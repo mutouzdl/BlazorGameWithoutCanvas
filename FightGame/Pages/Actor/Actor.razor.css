@@ -1,0 +1,53 @@
+﻿
+.actor {
+    width: 64px;
+    height: 64px;
+    margin: 50px auto;
+}
+
+@keyframes actorStand {
+	0%{background-position:0px 0px;}
+    33%{background-position:-64px 0px;}
+    66%{background-position:-128px  0px;}
+	100%{background-position:0px 0px;}
+}
+
+.actorStand {
+    animation: actorStand 1s step-start infinite;
+}
+
+@keyframes actorAttack {
+    0%{background-position:-256px 0px;}
+	20%{background-position:-320px 0px;}
+	40%{background-position:-384px 0px;}
+	60%{background-position:-448px 0px;}
+	80%{background-position:-512px 0px;}
+	100%{background-position:-128px 0px;}
+}
+
+.actorAttack {
+    animation: actorAttack 0.5s step-start infinite;
+}
+
+@keyframes actorHurt {
+	0%{background-position:0px -128px;}
+    33%{background-position:-64px -128px;}
+    66%{background-position:-128px -128px;}
+	100%{background-position:0px -128px;}
+}
+
+.actorHurt {
+    animation: actorHurt 0.3s step-start infinite;
+}
+
+@keyframes actorDead {
+	0%{background-position:0px -320px;}
+    33%{background-position:-384px -320px;}
+	66%{background-position:448px -320px;}
+	100%{background-position:512px -320px;}
+}
+
+.actorDead {
+    animation: actorDead 0.2s step-start;
+    animation-fill-mode: forwards;
+}

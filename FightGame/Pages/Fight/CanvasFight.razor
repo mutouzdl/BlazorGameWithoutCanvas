@@ -1,0 +1,57 @@
+﻿@page "/canvas"
+
+@using Blazor.Extensions
+@using Blazor.Extensions.Canvas.Canvas2D
+@using System.Drawing
+
+@inject IJSRuntime JsRuntime;
+
+<img @ref="_spritesheet" hidden src="actor/1019010301.png" />
+
+<div id="canvasContainer" style="position: fixed; opacity: 1; background-color: white; width: 100%; height: 100%">
+    <BECanvas @ref="_canvas"></BECanvas>
+</div>
+
+@code
+{
+    BECanvasComponent _canvas;
+    ElementReference _spritesheet;
+
+    DemoGame _game;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
+
+        _game = await DemoGame.Create(_canvas);
+
+        var animation = new Animation(
+            _game.Hero,
+            "stand",
+            new Size(64, 64),
+            new Size(576, 384),
+            0,
+            3,
+            3,
+            _spritesheet
+            );
+
+        var animator = new Animator(_game.Hero);
+        animator.AddAnimation(animation);
+
+        _game.Hero.AddComponent(animator);
+
+        animator.Play("stand");
+    }
+    
+    [JSInvokable]
+    public async ValueTask GameLoop(float timeStamp, int width, int height)
+    {
+        if (null == _game) return;
+        await _game.Step(timeStamp);
+    }
+
+}
