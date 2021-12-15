@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\map\" />
+    <Folder Include="wwwroot\assets\map\" />
   </ItemGroup>
 
   <ItemGroup>

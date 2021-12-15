@@ -2,7 +2,7 @@
 
 namespace FightGame
 {
-    public partial class Actor
+    public partial class ActorOld
     {
         [Parameter]
         public string ActorId { get; set; }

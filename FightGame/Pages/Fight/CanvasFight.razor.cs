@@ -1,10 +1,5 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using System.Drawing;
+﻿using System.Numerics;
 using Blazor.Extensions;
-using BlazorGameFramework;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -14,6 +9,9 @@ namespace FightGame
     {
         [Inject]
         public IJSRuntime JsRuntime { get; set; }
+
+        [Inject]
+        public IGraphicAssetService GraphicAssetService { get; set; }
 
         private int _fps = 0;
 
@@ -29,35 +27,32 @@ namespace FightGame
             if (!firstRender || _world != null)
                 return;
 
-            //await JsRuntime.InvokeAsync<object>("initGame", DotNetObjectReference.Create(this));
-
             _game = await DemoGame.Create(_canvas);
 
-            var animation = new Animation(
-                _game.Hero,
-                "stand",
-                new Size(64, 64),
-                new Size(576, 384),
+            var hero = new Actor(GraphicAssetService);
+            hero.Init("1064020302");
+            hero.Transform.Direction = Vector2.UnitX * -1;
+            hero.Transform.Position = new Vector2(
                 0,
-                3,
-                3,
-                _spritesheet
-                );
+                _game.Display.Size.Height / 2 - hero.Transform.Size.Height / 2);
 
-            var animator = new Animator(_game.Hero);
-            animator.AddAnimation(animation);
+            _game.AddGameObject(hero);
 
-            _game.Hero.AddComponent(animator);
 
-            animator.Play("stand");
+            var monster = new Actor(GraphicAssetService);
+            monster.Init("1019010301");
+            monster.Transform.Position = new Vector2(
+                _game.Display.Size.Width - monster.Transform.Size.Width,
+                _game.Display.Size.Height / 2 - monster.Transform.Size.Height / 2);
+
+            _game.AddGameObject(monster);
 
             _world = new();
             _world.Logic += Logic;
             _world.Start();
-
         }
 
-        private async void Logic(object sender, WorldLogicEventArgs e)
+        private async Task Logic(object sender, WorldLogicEventArgs e)
         {
             _fps = _world.CurrentFPS;
 

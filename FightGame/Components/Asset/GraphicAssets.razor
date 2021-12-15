@@ -1,0 +1,6 @@
+﻿@namespace FightGame
+
+@foreach (var asset in _assets)
+{
+    <img hidden src="@asset.Url" @ref="@asset.ImageElementReference" @onload="@(() => OnLoadGraphicAsset(asset.Uid))" />
+}

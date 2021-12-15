@@ -10,7 +10,7 @@ namespace FightGame
         private bool _isRunning = false;
         private decimal _timeCounter = 0;
 
-        public event EventHandler<WorldLogicEventArgs> Logic;
+        public event Func<object, WorldLogicEventArgs, Task> Logic;
 
         public async void Start()
         {
@@ -30,7 +30,7 @@ namespace FightGame
                 stopWatch.Reset();
                 stopWatch.Start();
 
-                this.OnLogic(deltaTime);
+                await OnLogic(deltaTime);
 
                 stopWatch.Stop();
 
@@ -53,13 +53,14 @@ namespace FightGame
 
         public int CurrentFPS { get; private set; } = 0;
 
-        private void OnLogic(float deltaTime)
+        private async Task OnLogic(float deltaTime)
         {
             var e = new WorldLogicEventArgs()
             {
                 DeltaTime = deltaTime,
             };
-            Logic?.Invoke(this, e);
+
+            await Logic.Invoke(this, e);
         }
     }
 }

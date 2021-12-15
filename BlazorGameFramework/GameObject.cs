@@ -5,6 +5,7 @@
 /// </summary>
 public class GameObject
 {
+    public string Uid { get; set; } = Guid.NewGuid().ToString();
     private ComponentsCollection Components { get; } = new ComponentsCollection();
 
     public async ValueTask Update(GameContext game)
@@ -37,5 +38,23 @@ public class GameObject
         }
 
         return component;
+    }
+
+    private Transform _transform = null;
+    public Transform Transform
+    {
+        get
+        {
+            if (_transform == null)
+            {
+                _transform = GetComponent<Transform>();
+            }
+
+            return _transform;
+        }
+        set
+        {
+            _transform = value;
+        }
     }
 }

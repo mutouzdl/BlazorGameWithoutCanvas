@@ -7,8 +7,8 @@ namespace FightGame
         private World _world = new();
 
         private int _fps = 0;
-        private Actor _hero;
-        private Actor _monster;
+        private ActorOld _hero;
+        private ActorOld _monster;
 
         protected override void OnInitialized()
         {
@@ -18,7 +18,7 @@ namespace FightGame
             _world.Start();
         }
 
-        private void Logic(object sender, WorldLogicEventArgs e)
+        private async Task Logic(object sender, WorldLogicEventArgs e)
         {
             _fps = _world.CurrentFPS;
 

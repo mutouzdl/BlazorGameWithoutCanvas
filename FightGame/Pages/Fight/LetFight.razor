@@ -11,7 +11,7 @@
 		<div class="bgDiv">
 			<div style="margin: 20% auto;width: 70%;">
 				<div style="float: left;">
-					<Actor @ref="@_hero" ActorId="1064020302" Mirror />
+					<ActorOld @ref="@_hero" ActorId="1064020302" Mirror />
 					<Space>
 						<SpaceItem>
 							<Button OnClick=@(() => { _hero.Attack(); })>攻击</Button> 
@@ -28,7 +28,7 @@
 					</Space>
 				</div>
 				<div style="float: right;">
-					<Actor @ref="@_monster" ActorId="1019010301" />
+					<ActorOld @ref="@_monster" ActorId="1019010301" />
 					<Space>
 						<SpaceItem>
 							<Button OnClick=@(() => { _monster.Attack(); })>攻击</Button> 

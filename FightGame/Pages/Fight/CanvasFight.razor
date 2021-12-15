@@ -6,7 +6,7 @@
 @using Blazor.Extensions.Canvas.Canvas2D
 @using System.Drawing
 
-<img @ref="_spritesheet" hidden src="actor/1019010301.png" />
+<GraphicAssets />
 
 <Layout>
 	<Header>
@@ -16,13 +16,11 @@
 	</Header>
     <Content>
 		<div class="bgDiv">
-			<div style="margin: 20% auto;width: 70%;">
-				<BECanvas  
-					Width="@(_game == null ? 10 : _game.Display.Size.Width)" 
-					Height="@(_game == null ? 10 : _game.Display.Size.Height)" 
-					@ref="_canvas">
-				</BECanvas>
-			</div>
+			<BECanvas  
+				Width="@(_game == null ? 10 : _game.Display.Size.Width)" 
+				Height="@(_game == null ? 10 : _game.Display.Size.Height)" 
+				@ref="_canvas">
+			</BECanvas>
 		</div>
 	</Content>
 	<Footer>
