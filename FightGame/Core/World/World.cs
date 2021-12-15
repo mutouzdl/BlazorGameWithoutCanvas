@@ -22,7 +22,7 @@ namespace FightGame
             _isRunning = true;
 
             Stopwatch stopWatch = new Stopwatch();
-            double deltaTime = 0;
+            float deltaTime = 0;
             while (_isRunning || _timeCounter > 0)
             {
                 _timeCounter = _isRunning ? 10 : _timeCounter - 1;
@@ -39,7 +39,7 @@ namespace FightGame
                 var d = Convert.ToInt32(FPS_DELAY - ms);
                 if (d <= 1) d = 1;
 
-                deltaTime = d / 1000d;
+                deltaTime = d / 1000f;
 
                 await Task.Delay(d);
                 CurrentFPS = Convert.ToInt32(1000.0 / d);
@@ -53,7 +53,7 @@ namespace FightGame
 
         public int CurrentFPS { get; private set; } = 0;
 
-        private void OnLogic(double deltaTime)
+        private void OnLogic(float deltaTime)
         {
             var e = new WorldLogicEventArgs()
             {

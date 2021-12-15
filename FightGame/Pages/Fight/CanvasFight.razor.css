@@ -1,0 +1,18 @@
+﻿
+@keyframes cloud_map {
+	0%{background: url('map/cloud1.jpg');}
+	25%{background: url('map/cloud2.jpg');}
+	50%{background: url('map/cloud3.jpg');}
+	75%{background: url('map/cloud4.jpg');}
+	100%{background: url('map/cloud1.jpg');}
+}
+
+
+.bgDiv {
+	width: 1200px;
+	height: 600px;
+	margin: 5% auto 1% auto;
+	padding: 1%;
+	background: url('map/cloud1.jpg');
+    animation: cloud_map 30s infinite;
+}

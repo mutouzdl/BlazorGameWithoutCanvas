@@ -5,24 +5,13 @@
 /// </summary>
 public class GameTime
 {
-    private float _totalTime = 0;
+    /// <summary>
+    /// 游戏运行总时间（秒）
+    /// </summary>
+    public float TotalTime { get; set; }
 
     /// <summary>
-    /// total time elapsed since the beginning of the game
+    /// 距离上一帧的时间（秒）
     /// </summary>
-    public float TotalTime
-    {
-        get => _totalTime;
-        set
-        {
-            this.ElapsedTime = value - _totalTime;
-            _totalTime = value;
-
-        }
-    }
-
-    /// <summary>
-    /// time elapsed since last frame
-    /// </summary>
-    public float ElapsedTime { get; private set; }
+    public float ElapsedTime { get; set; }
 }

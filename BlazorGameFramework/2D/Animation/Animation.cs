@@ -77,7 +77,7 @@ public class Animation
             return;
         }
 
-        if (game.GameTime.TotalTime - _lastUpdate > 1000f / FPS)
+        if (game.GameTime.TotalTime - _lastUpdate > 1f / FPS)
         {
             _lastUpdate = game.GameTime.TotalTime;
 

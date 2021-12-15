@@ -2,6 +2,6 @@
 {
     public class WorldLogicEventArgs : EventArgs
     {
-        public double DeltaTime { get; set; }
+        public float DeltaTime { get; set; }
     }
 }
