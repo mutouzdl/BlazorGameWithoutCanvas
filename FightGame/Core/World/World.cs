@@ -4,7 +4,7 @@ namespace FightGame
 {
     public class World
     {
-        public const int FPS = 90;
+        public const int FPS = 30;
         public int FPS_DELAY => Convert.ToInt32(1000.0 / FPS);
 
         private bool _isRunning = false;

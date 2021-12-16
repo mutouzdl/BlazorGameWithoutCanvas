@@ -1,6 +1,4 @@
-﻿using Blazor.Extensions.Canvas.Canvas2D;
-
-namespace BlazorGameFramework;
+﻿namespace BlazorGameFramework;
 
 public class Animator : BaseComponent
 {
@@ -44,13 +42,13 @@ public class Animator : BaseComponent
         }
     }
 
-    public async ValueTask Render(GameContext game, Canvas2DContext context)
+    public override async ValueTask Render(GameContext game)
     {
         if (_currentAnimation == null || _currentAnimation.Playing == false)
         {
             return;
         }
 
-        await _currentAnimation.Render(game, context);
+        await _currentAnimation.Render(game);
     }
 }

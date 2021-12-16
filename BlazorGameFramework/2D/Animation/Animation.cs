@@ -1,8 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
 
-using Blazor.Extensions.Canvas.Canvas2D;
-
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorGameFramework;
@@ -70,7 +68,7 @@ public class Animation
         _playTimes = 0;
     }
 
-    public async ValueTask Render(GameContext game, Canvas2DContext context)
+    public async ValueTask Render(GameContext game)
     {
         if (Playing == false)
         {
@@ -86,13 +84,17 @@ public class Animation
             _currFrameIndex++;
         }
 
-        var dx = -(_transform.Direction.X - 1f) * FrameSize.Width / 2f;
-        await context.SetTransformAsync(_transform.Direction.X, 0, 0, 1, dx, 0);
+        await game.Canvas.SaveAsync();
 
-        await context.DrawImageAsync(ImageRef, _currFramePos.X, _currFramePos.Y,
+        var dx = -(_transform.Direction.X - 1f) * FrameSize.Width / 2f;
+        await game.Canvas.SetTransformAsync(_transform.Direction.X, 0, 0, 1, dx, 0);
+
+        await game.Canvas.DrawImageAsync(ImageRef, _currFramePos.X, _currFramePos.Y,
             FrameSize.Width, FrameSize.Height,
             _transform.Position.X, _transform.Position.Y,
             FrameSize.Width, FrameSize.Height);
+
+        await game.Canvas.RestoreAsync();
 
         _playTimes++;
 

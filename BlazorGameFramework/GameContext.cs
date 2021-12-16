@@ -1,4 +1,6 @@
-﻿namespace BlazorGameFramework;
+﻿using Blazor.Extensions.Canvas.Canvas2D;
+
+namespace BlazorGameFramework;
 
 public abstract class GameContext
 {
@@ -7,6 +9,7 @@ public abstract class GameContext
     /// </summary>
     public GameTime GameTime { get; } = new GameTime();
     public Display Display { get; } = new Display();
+    public Canvas2DContext Canvas { get; protected set; }
 
     //public async ValueTask Step(float timeStamp)
     //{
@@ -16,10 +19,10 @@ public abstract class GameContext
     //    await Render();
     //}
 
-    public async ValueTask Step(float deltaTime)
+    public async ValueTask Step(float timeStamp, float elapsedTime)
     {
-        this.GameTime.TotalTime += deltaTime;
-        this.GameTime.ElapsedTime = deltaTime;
+        this.GameTime.TotalTime = timeStamp;
+        this.GameTime.ElapsedTime = elapsedTime;
 
         await Update();
         await Render();

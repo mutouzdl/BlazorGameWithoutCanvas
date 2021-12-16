@@ -11,16 +11,18 @@
 <Layout>
 	<Header>
 		<div style="color: white;">
-			战斗模块尝试 FPS: @_fps
+			战斗模块尝试
 		</div>
 	</Header>
     <Content>
 		<div class="bgDiv">
-			<BECanvas  
-				Width="@(_game == null ? 10 : _game.Display.Size.Width)" 
-				Height="@(_game == null ? 10 : _game.Display.Size.Height)" 
-				@ref="_canvas">
-			</BECanvas>
+			<div id="canvasContainer" style="width: 1200px; height: 600px;">
+				<BECanvas  
+					Width="1200" 
+					Height="600" 
+					@ref="_canvas">
+				</BECanvas>
+			</div>
 		</div>
 	</Content>
 	<Footer>

@@ -6,6 +6,8 @@
 public interface IComponent
 {
     ValueTask Update(GameContext game);
+    ValueTask Render(GameContext game);
 
-    public GameObject Owner { get; }
+    public void SetOwner(GameObject owner);
+
 }

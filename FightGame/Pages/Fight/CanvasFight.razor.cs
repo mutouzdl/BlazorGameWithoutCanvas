@@ -13,23 +13,64 @@ namespace FightGame
         [Inject]
         public IGraphicAssetService GraphicAssetService { get; set; }
 
-        private int _fps = 0;
-
         private BECanvasComponent _canvas;
         private ElementReference _spritesheet;
 
         private DemoGame _game;
 
-        private World _world;
+        //private World _world;
+
+        //protected override async Task OnAfterRenderAsync(bool firstRender)
+        //{
+        //    if (!firstRender || _world != null)
+        //        return;
+
+        //    _game = await DemoGame.Create(_canvas);
+
+        //    Global.GameContext = _game;
+        //    Global.GraphicAssetService = GraphicAssetService;
+
+        //    var hero = new Actor();
+        //    hero.Init("1064020302");
+        //    hero.Transform.Direction = Vector2.UnitX * -1;
+        //    hero.Transform.Position = new Vector2(
+        //        0,
+        //        _game.Display.Size.Height / 2 - hero.Transform.Size.Height / 2);
+
+        //    _game.AddGameObject(hero);
+
+
+        //    var monster = new Actor();
+        //    monster.Init("1019010301");
+        //    monster.Transform.Position = new Vector2(
+        //        _game.Display.Size.Width - monster.Transform.Size.Width,
+        //        _game.Display.Size.Height / 2 - monster.Transform.Size.Height / 2);
+
+        //    _game.AddGameObject(monster);
+
+        //    _world = new();
+        //    _world.Logic += Logic;
+        //    _world.Start();
+        //}
+
+        //private async Task Logic(object sender, WorldLogicEventArgs e)
+        //{
+        //    await _game.Step(e.DeltaTime);
+        //}
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (!firstRender || _world != null)
+            if (!firstRender)
                 return;
+
+            await JsRuntime.InvokeAsync<object>("initCanvas", DotNetObjectReference.Create(this));
 
             _game = await DemoGame.Create(_canvas);
 
-            var hero = new Actor(GraphicAssetService);
+            Global.GameContext = _game;
+            Global.GraphicAssetService = GraphicAssetService;
+
+            var hero = new Actor();
             hero.Init("1064020302");
             hero.Transform.Direction = Vector2.UnitX * -1;
             hero.Transform.Position = new Vector2(
@@ -38,8 +79,7 @@ namespace FightGame
 
             _game.AddGameObject(hero);
 
-
-            var monster = new Actor(GraphicAssetService);
+            var monster = new Actor();
             monster.Init("1019010301");
             monster.Transform.Position = new Vector2(
                 _game.Display.Size.Width - monster.Transform.Size.Width,
@@ -47,18 +87,13 @@ namespace FightGame
 
             _game.AddGameObject(monster);
 
-            _world = new();
-            _world.Logic += Logic;
-            _world.Start();
         }
 
-        private async Task Logic(object sender, WorldLogicEventArgs e)
+        [JSInvokable]
+        public async ValueTask GameLoop(float timeStamp, float elapsedTime)
         {
-            _fps = _world.CurrentFPS;
-
-            StateHasChanged();
-
-            await _game.Step(e.DeltaTime);
+            if (null == _game) return;
+            await _game.Step(timeStamp, elapsedTime);
         }
     }
 }

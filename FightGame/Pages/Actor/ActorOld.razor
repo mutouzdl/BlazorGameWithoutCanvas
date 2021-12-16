@@ -1,9 +1,0 @@
-﻿@namespace FightGame
-
-<PropertyBar CurrentValue="50" />
-<div 
-	class=@($"actor actor{_state.ToString()}") 
-	style=@($"position: relative; background: url('actor/{ActorId}.png') no-repeat; {_style}" )
->
-	<BulletManager @ref="@_bulletManager" />
-</div>

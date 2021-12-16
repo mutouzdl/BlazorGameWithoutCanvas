@@ -1,11 +1,14 @@
-﻿namespace BlazorGameFramework;
+﻿using System.Drawing;
+using System.Numerics;
+
+namespace BlazorGameFramework;
 
 /// <summary>
 /// 参考来源：https://github.com/mizrael/BlazorCanvas
 /// </summary>
-public class GameObject
+public class GameObject : Object
 {
-    public string Uid { get; set; } = Guid.NewGuid().ToString();
+    private static Size _defaultSize = new Size(10, 10);
     private ComponentsCollection Components { get; } = new ComponentsCollection();
 
     public async ValueTask Update(GameContext game)
@@ -14,10 +17,37 @@ public class GameObject
         {
             await component.Update(game);
         }
+
+        var childCount = Transform.GetChildCount();
+        for (int i = 0; i < childCount; i++)
+        {
+            var child = Transform.GetChild(i);
+            await child.Update(game);
+        }
+
+        await OnUpdate(game);
+    }
+
+    public async ValueTask Render(GameContext game)
+    {
+        foreach (var component in this.Components)
+        {
+            await component.Render(game);
+        }
+
+        var childCount = Transform.GetChildCount();
+        for (int i = 0; i < childCount; i++)
+        {
+            var child = Transform.GetChild(i);
+            await child.Render(game);
+        }
+
+        await OnRender(game);
     }
 
     public void AddComponent(IComponent component)
     {
+        component.SetOwner(this);
         Components.Add(component);
     }
 
@@ -34,11 +64,14 @@ public class GameObject
         {
             component = Activator.CreateInstance<T>();
 
-            Components.Add(component);
+            AddComponent(component);
         }
 
         return component;
     }
+
+    protected virtual async ValueTask OnUpdate(GameContext game) { }
+    protected virtual async ValueTask OnRender(GameContext game) { }
 
     private Transform _transform = null;
     public Transform Transform
@@ -47,7 +80,13 @@ public class GameObject
         {
             if (_transform == null)
             {
-                _transform = GetComponent<Transform>();
+                _transform = new Transform(this)
+                {
+                    Position = Vector2.Zero,
+                    Direction = Vector2.One,
+                    Size = _defaultSize
+                };
+                AddComponent(_transform);
             }
 
             return _transform;

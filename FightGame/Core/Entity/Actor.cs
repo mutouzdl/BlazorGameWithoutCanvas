@@ -1,31 +1,23 @@
 ﻿using System.Drawing;
-using System.Numerics;
 using BlazorGameFramework;
 
 namespace FightGame
 {
     public class Actor : GameObject
     {
-        private static readonly Size FrameSize = new Size(64, 64);
-        private static readonly Size ImageSize = new Size(576, 384);
+        private static readonly Size _frameSize = new Size(64, 64);
+        private static readonly Size _imageSize = new Size(576, 384);
 
-        private IGraphicAssetService _graphicAssetService;
+        private EnumActorState _state = EnumActorState.Stand;
+        private BulletManager _bulletManager = new();
 
-        public Actor(IGraphicAssetService graphicAssetService)
-        {
-            _graphicAssetService = graphicAssetService;
-        }
+        private double _timeCounter = 0;
 
         public void Init(string assetName)
         {
-            AddComponent(new Transform(this)
-            {
-                Position = Vector2.Zero,
-                Direction = Vector2.One,
-                Size = FrameSize
-            });
+            Transform.Size = _frameSize;
 
-            var asset = _graphicAssetService.LoadGraphicAsset($"assets/actor/{assetName}.png");
+            var asset = Global.GraphicAssetService.LoadGraphicAsset($"assets/actor/{assetName}.png");
 
             int startFrame = 0;
             int frameCount = 3;
@@ -35,8 +27,8 @@ namespace FightGame
             var animation = new Animation(
                 this,
                 animationName,
-                FrameSize,
-                ImageSize,
+                _frameSize,
+                _imageSize,
                 startFrame,
                 frameCount,
                 fps,
@@ -49,6 +41,55 @@ namespace FightGame
             AddComponent(animator);
 
             animator.Play("stand");
+        }
+
+
+        //public async void Stand()
+        //{
+        //    _state = EnumActorState.Stand;
+        //}
+
+        //public async void Attack()
+        //{
+        //    _state = EnumActorState.Attack;
+
+        //    Stand();
+        //}
+
+        //public async void ReceiveHurt()
+        //{
+        //    _state = EnumActorState.Hurt;
+
+        //    await Task.Delay(300);
+
+        //    Stand();
+        //}
+
+        //public async void Dead()
+        //{
+        //    _state = EnumActorState.Dead;
+        //}
+
+        //public async void Resurgence()
+        //{
+        //    Stand();
+        //}
+
+
+        protected override async ValueTask OnUpdate(GameContext game)
+        {
+            await _bulletManager.Update(game);
+
+            _timeCounter += game.GameTime.ElapsedTime;
+
+            if (_timeCounter > 1)
+            {
+                _timeCounter = 0;
+
+                var bullet = _bulletManager.GetOrAddBullet(Transform.Direction * -1);
+
+                bullet.Transform.SetParent(this);
+            }
         }
     }
 }

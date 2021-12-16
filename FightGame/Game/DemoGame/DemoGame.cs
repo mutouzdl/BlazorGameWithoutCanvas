@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 
 using Blazor.Extensions;
-using Blazor.Extensions.Canvas.Canvas2D;
 
 using BlazorGameFramework;
 
@@ -10,9 +9,7 @@ namespace FightGame;
 
 public class DemoGame : GameContext
 {
-
-    private Canvas2DContext _context;
-    public List<GameObject> _gameObjects { get; } = new();
+    public List<GameObject> GameObjects { get; } = new();
 
     private DemoGame()
     {
@@ -21,22 +18,25 @@ public class DemoGame : GameContext
 
     public static async ValueTask<DemoGame> Create(BECanvasComponent canvas)
     {
-        var game = new DemoGame { _context = await canvas.CreateCanvas2DAsync() };
+        var game = new DemoGame
+        {
+            Canvas = await canvas.CreateCanvas2DAsync(),
+        };
 
         return game;
     }
 
     public void AddGameObject(GameObject gameObject)
     {
-        if (!_gameObjects.Any(t => t.Uid == gameObject.Uid))
+        if (!GameObjects.Any(t => t.Uid == gameObject.Uid))
         {
-            _gameObjects.Add(gameObject);
+            GameObjects.Add(gameObject);
         }
     }
 
     protected override async ValueTask Update()
     {
-        foreach (var gameObject in _gameObjects)
+        foreach (var gameObject in GameObjects)
         {
             await gameObject.Update(this);
         }
@@ -44,15 +44,23 @@ public class DemoGame : GameContext
 
     protected override async ValueTask Render()
     {
-        await _context.ClearRectAsync(0, 0, this.Display.Size.Width, this.Display.Size.Height);
+        await Canvas.ClearRectAsync(0, 0, this.Display.Size.Width, this.Display.Size.Height);
 
-        foreach (var gameObject in _gameObjects)
+        await Canvas.SetFontAsync("20px serif");
+
+        await Canvas.StrokeTextAsync(
+            $"FPS: {Math.Round(1 / GameTime.ElapsedTime, 0)}",
+            this.Display.Size.Width - 80, 20);
+
+        await Canvas.StrokeTextAsync(
+            $"ElapsedTime: {Math.Round(GameTime.ElapsedTime, 2)}",
+            this.Display.Size.Width - 180, 80);
+
+
+        foreach (var gameObject in GameObjects)
         {
-            var animator = gameObject.GetComponent<Animator>();
-            if (animator != null)
-            {
-                await animator.Render(this, _context);
-            }
+            await gameObject.Render(this);
+
         }
     }
 }

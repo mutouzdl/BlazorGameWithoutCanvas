@@ -3,11 +3,14 @@
 /// <summary>
 /// 参考来源：https://github.com/mizrael/BlazorCanvas
 /// </summary>
-public abstract class BaseComponent : IComponent
+public abstract class BaseComponent : Object, IComponent
 {
-    public string Uid { get; } = Guid.NewGuid().ToString();
+    public GameObject Owner { get; protected set; }
 
-    public GameObject Owner { get; }
+    public BaseComponent()
+    {
+
+    }
 
     protected BaseComponent(GameObject owner)
     {
@@ -15,7 +18,11 @@ public abstract class BaseComponent : IComponent
         this.Owner.AddComponent(this);
     }
 
-    public virtual async ValueTask Update(GameContext game)
+    public void SetOwner(GameObject owner)
     {
+        Owner = owner;
     }
+
+    public virtual async ValueTask Update(GameContext game) { }
+    public virtual async ValueTask Render(GameContext game) { }
 }
