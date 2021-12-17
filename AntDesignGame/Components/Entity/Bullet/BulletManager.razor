@@ -1,0 +1,6 @@
+﻿@namespace AntDesignGame
+
+@foreach(var bulletConfig in _bulletConfigList)
+{
+	<Bullet BulletConfig="bulletConfig" @ref="@_bulletMap[bulletConfig]" />
+}
