@@ -1,7 +1,8 @@
 ﻿@namespace AntDesignGame
+@inherits GameWebComponent<PropertyBarGameObject>
 
 <Progress 
-	Style="@Style"
+	Style=@($"{SizeStyle} {PositionStyle}")
 	Percent="@((double)Percent)" 
 	Size="@ProgressSize.Small" 
 	StrokeColor="@StrokeColor" 

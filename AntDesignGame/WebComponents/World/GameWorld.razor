@@ -1,0 +1,9 @@
+﻿@namespace AntDesignGame
+
+@if (GameContext != null)
+{
+	foreach(var gameObject in GameContext.GameObjects)
+	{
+		<RenderGameWordObject @ref="_renderGameWorldObject" GameObject="@gameObject" />
+	}
+}

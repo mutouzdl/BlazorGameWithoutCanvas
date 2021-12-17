@@ -1,0 +1,29 @@
+﻿@namespace AntDesignGame
+
+<DynamicComponent 
+			Type="@GameObject.WebComponentType" 
+			Parameters=@(GameObject.WebParameters)
+/>
+		
+@for(int i = 0; i< GameObject.Transform.GetChildCount(); i++)
+{
+	var childGameObject = GameObject.Transform.GetChild(i);
+	
+	if(childGameObject.Transform.GetChildCount() > 0)
+	{
+		<RenderGameWordObject GameObject="@childGameObject" />
+	}
+	else
+	{
+		<DynamicComponent 
+			Type="@childGameObject.WebComponentType" 
+			Parameters=@(childGameObject.WebParameters)
+		/>
+	}
+}
+
+@code
+{
+	[Parameter]
+	public GameObject GameObject { get; set; }
+}

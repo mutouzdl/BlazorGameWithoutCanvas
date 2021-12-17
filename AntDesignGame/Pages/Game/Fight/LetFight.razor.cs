@@ -33,7 +33,7 @@ public partial class LetFight : ComponentBase
         ActorGameObject actorGameObject = new ActorGameObject(typeof(Actor))
         {
             ActorId = "1064020302",
-            Mirror = true,
+            ImageMirror = true,
         };
         actorGameObject.Transform.LocalPosition = new Vector2(10, 120);
 
@@ -42,11 +42,12 @@ public partial class LetFight : ComponentBase
             ActorId = "1019010301",
         };
         monsterGameObject.Transform.LocalPosition = new Vector2(1000, 120);
+        monsterGameObject.Transform.Direction = Vector2.UnitX * -1;
 
         gameContext.AddGameObject(actorGameObject);
         gameContext.AddGameObject(monsterGameObject);
 
-        _gameWorld.GameContext = gameContext;
+        _gameWorld.SetGameContext(gameContext);
         _gameWorld.Refresh();
 
         _gameLoop = new();
@@ -70,6 +71,6 @@ public partial class LetFight : ComponentBase
 
         await _gameWorld.GameContext.Step(e.ElapsedTime);
 
-        //StateHasChanged();
+        _gameWorld.Refresh();
     }
 }

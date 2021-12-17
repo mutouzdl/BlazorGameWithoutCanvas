@@ -1,13 +1,11 @@
 ﻿@namespace AntDesignGame
+@inherits GameWebComponent<ActorGameObject>
 @using System.Drawing
 
-<div style="@Style">
-	@*<PropertyBar Size=@(new Size(100, 30)) CurrentValue="50" />*@
+<div style="@PositionStyle">
 	<div 
 		class=@($"actor actor{GameObject.State.ToString()}") 
 		style="@ActorStyle"
 	>
-		@*<BulletManager @ref="@_bulletManager" />*@
 	</div>
-	@Children
 </div>

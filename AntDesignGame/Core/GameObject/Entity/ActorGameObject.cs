@@ -9,7 +9,10 @@ public class ActorGameObject : GameObject
 {
     public string ActorId { get; set; }
 
-    public bool Mirror { get; set; } = false;
+    /// <summary>
+    /// 图片是否镜像翻转
+    /// </summary>
+    public bool ImageMirror { get; set; } = false;
 
     public EnumActorState State { get; private set; } = EnumActorState.Stand;
 
@@ -23,7 +26,7 @@ public class ActorGameObject : GameObject
         Init();
     }
 
-    public void Init()
+    private void Init()
     {
         _propertyBarGameObject = new(typeof(PropertyBar));
 
@@ -32,21 +35,24 @@ public class ActorGameObject : GameObject
         _propertyBarGameObject.CurrentValue = 80;
 
         Transform.AddChild(_propertyBarGameObject);
+
+        _bulletManager = new BulletManager();
+        AddComponent(_bulletManager);
     }
 
     protected override async ValueTask OnUpdate(GameContext game)
     {
         if (_bulletManager != null)
         {
-            _bulletManager.Logic(game.GameTime.ElapsedTime);
-
             _timeCounter += game.GameTime.ElapsedTime;
 
             if (_timeCounter > 2)
             {
                 _timeCounter = 0;
 
-                _bulletManager.Fire();
+                var bulletGameObject = _bulletManager.GetOrAddBulletGameObject(Transform.Direction);
+
+                Transform.AddChild(bulletGameObject);
             }
         }
     }

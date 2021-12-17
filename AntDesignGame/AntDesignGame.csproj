@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Base\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AntDesignGameFramework\AntDesignGameFramework.csproj" />
   </ItemGroup>
 

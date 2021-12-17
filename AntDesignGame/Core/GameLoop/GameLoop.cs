@@ -37,7 +37,7 @@ public class GameLoop
             var logicCostMilliseconds = stopWatch.Elapsed.TotalMilliseconds;
 
             var d = Convert.ToInt32(FPS_DELAY - logicCostMilliseconds);
-            if (d <= 0) d = 0;
+            if (d <= 1) d = 1;
 
             deltaTime = d / 1000f;
 

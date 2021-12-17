@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FightGame", "FightGame\Figh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorGameFramework", "BlazorGameFramework\BlazorGameFramework.csproj", "{CDB7EFDE-584F-4D53-AD2B-C37A21D8CF77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntDesignGame", "AntDesignGame\AntDesignGame.csproj", "{66C456CE-72C6-423A-8474-6B35B2DF960A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntDesignGame", "AntDesignGame\AntDesignGame.csproj", "{66C456CE-72C6-423A-8474-6B35B2DF960A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntDesignGameFramework", "AntDesignGameFramework\AntDesignGameFramework.csproj", "{B3786B2B-E2DB-43A3-932A-80DCC9FC2E1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntDesignGameFramework", "AntDesignGameFramework\AntDesignGameFramework.csproj", "{B3786B2B-E2DB-43A3-932A-80DCC9FC2E1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
