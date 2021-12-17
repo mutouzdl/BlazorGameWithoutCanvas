@@ -1,49 +1,21 @@
 ﻿@page "/"
 @namespace AntDesignGame
+@using System.Numerics
 
-<Layout>
+_gameLoop== null: @(_gameLoop == null)
+<GameWorld @ref="@_gameWorld" />
+
+@*<Layout>
 	<Header>
 		<div style="color: white;">
 			战斗模块尝试 FPS: @_fps
 		</div>
 	</Header>
     <Content>
-		<div class="bgDiv">
-			<div style="margin: 20% auto;width: 70%;">
-				<div style="float: left;">
-					<Actor @ref="@_hero" ActorId="1064020302" Mirror />
-					<Space>
-						<SpaceItem>
-							<Button OnClick=@(() => { _hero.Attack(); })>攻击</Button> 
-						</SpaceItem>
-						<SpaceItem>
-							<Button OnClick=@(() => { _hero.ReceiveHurt(); })>受伤</Button>
-						</SpaceItem>
-						<SpaceItem>
-							<Button OnClick=@(() => { _hero.Resurgence(); })>复活</Button> 
-						</SpaceItem>
-						<SpaceItem>
-							<Button OnClick=@(() => { _hero.Dead(); })>死亡</Button>
-						</SpaceItem>
-					</Space>
-				</div>
-				<div style="float: right;">
-					<Actor @ref="@_monster" ActorId="1019010301" />
-					<Space>
-						<SpaceItem>
-							<Button OnClick=@(() => { _monster.Attack(); })>攻击</Button> 
-						</SpaceItem>
-						<SpaceItem>
-							<Button OnClick=@(() => { _monster.ReceiveHurt(); })>受伤</Button>
-						</SpaceItem>
-						<SpaceItem>
-							<Button OnClick=@(() => { _monster.Resurgence(); })>复活</Button> 
-						</SpaceItem>
-						<SpaceItem>
-							<Button OnClick=@(() => { _monster.Dead(); })>死亡</Button>
-						</SpaceItem>
-					</Space>
-				</div>
+		<div style="width: 100%;height:100%;position: absolute;background: black">
+			<div class="bgDiv" style="position: relative;">
+				<Actor @ref="@_hero" ActorId="1064020302" Mirror Position=@(new Vector2(10, 120)) />
+				<Actor @ref="@_monster" ActorId="1019010301" Position=@(new Vector2(1000, 120)) />
 			</div>
 		</div>
 	</Content>
@@ -52,4 +24,4 @@
 			<a href="http://www.benmutou.com">www.benmutou.com</a>
 		</div>
 	</Footer>
-</Layout>
+</Layout>*@

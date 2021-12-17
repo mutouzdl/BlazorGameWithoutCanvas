@@ -6,18 +6,15 @@ namespace AntDesignGame;
 public partial class PropertyBar
 {
     [Parameter]
-    public decimal MaxValue { get; set; } = 100;
-    [Parameter]
-    public decimal CurrentValue { get; set; } = 0;
-    [Parameter]
-    public EnumPropertyBarType PropertyBarType { get; set; } = EnumPropertyBarType.HP;
+    public PropertyBarGameObject GameObject { get; set; }
 
-    private decimal _percent => CurrentValue / MaxValue * 100;
-    private string _strokeColor => PropertyBarType switch
+    private decimal Percent => GameObject.CurrentValue / GameObject.MaxValue * 100;
+    private string StrokeColor => GameObject.PropertyBarType switch
     {
         EnumPropertyBarType.HP => "#FF4136",
         EnumPropertyBarType.MP => "#0074D9",
         _ => "#FF4136",
     };
 
+    private string Style => $"width: {GameObject.Transform.Size.Width}px;";
 }

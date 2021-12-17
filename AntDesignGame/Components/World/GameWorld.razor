@@ -1,0 +1,13 @@
+﻿@namespace AntDesignGame
+
+GameContext == null: @(GameContext == null)
+@if (GameContext != null)
+{
+	foreach(var gameObject in GameContext.GameObjects)
+	{
+		<DynamicComponent 
+			Type="@gameObject.WebComponentType" 
+			Parameters=@(GameContext.GameObjectParams[gameObject.Uid])
+		/>
+	}
+}

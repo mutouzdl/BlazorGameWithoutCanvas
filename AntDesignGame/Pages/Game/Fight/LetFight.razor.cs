@@ -1,36 +1,68 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Drawing;
+using System.Numerics;
+using Microsoft.AspNetCore.Components;
 
 namespace AntDesignGame;
 
 public partial class LetFight : ComponentBase
 {
-    private World _world = new();
+    private GameLoop _gameLoop;
+    private GameWorld _gameWorld;
 
     private int _fps = 0;
-    private Actor _hero;
-    private Actor _monster;
+    //private Actor _hero;
+    //private Actor _monster;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        _world.Logic += Logic;
-        _world.Start();
     }
 
-    private async Task Logic(object sender, WorldLogicEventArgs e)
+    protected override void OnAfterRender(bool firstRender)
     {
-        _fps = _world.CurrentFPS;
-
-        if (_hero != null)
+        if (_gameLoop != null)
         {
-            _hero.Logic(e.DeltaTime);
+            return;
         }
 
-        if (_monster != null)
+        var gameContext = new DemoGameContext();
+
+        gameContext.Display.Size = new Size(1200, 600);
+
+        ActorGameObject actorGameObject = new ActorGameObject(typeof(Actor))
         {
-            _monster.Logic(e.DeltaTime);
-        }
+            ActorId = "1064020302",
+            Mirror = true,
+        };
+
+        actorGameObject.Transform.Position = new Vector2(10, 120);
+
+        gameContext.AddGameObject(actorGameObject);
+
+        _gameWorld.GameContext = gameContext;
+        _gameWorld.Refresh();
+
+        _gameLoop = new();
+        _gameLoop.Logic += Logic;
+        _gameLoop.Start();
+    }
+
+    private async Task Logic(object sender, GameLoopLogicEventArgs e)
+    {
+        _fps = _gameLoop.CurrentFPS;
+
+        //if (_hero != null)
+        //{
+        //    _hero.Logic(e.DeltaTime);
+        //}
+
+        //if (_monster != null)
+        //{
+        //    _monster.Logic(e.DeltaTime);
+        //}
+
+        await _gameWorld.GameContext.Step(e.ElapsedTime);
 
         StateHasChanged();
     }

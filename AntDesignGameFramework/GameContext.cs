@@ -1,0 +1,59 @@
+﻿namespace AntDesignGameFramework;
+
+public abstract class GameContext
+{
+    public GameTime GameTime { get; } = new GameTime();
+    public Display Display { get; } = new Display();
+    public List<GameObject> GameObjects { get; } = new();
+    public Dictionary<string, Dictionary<string, object>> GameObjectParams { get; } = new();
+
+    public event Action<GameObject> OnAddGameObject;
+    public event Action<GameObject> OnDestoryGameObject;
+
+    public async ValueTask Step(float elapsedTime)
+    {
+        this.GameTime.TotalTime += elapsedTime;
+        this.GameTime.ElapsedTime = elapsedTime;
+
+        await Update();
+    }
+
+    protected abstract ValueTask Update();
+
+    public void AddGameObject(GameObject gameObject)
+    {
+        if (GameObjects.Any(t => t.Uid == gameObject.Uid))
+        {
+            return;
+        }
+
+        GameObjects.Add(gameObject);
+        GameObjectParams[gameObject.Uid] = new Dictionary<string, object> {
+            { "GameObject", gameObject }
+        };
+
+        if (OnAddGameObject != null)
+        {
+            OnAddGameObject.Invoke(gameObject);
+        }
+    }
+
+    public void DestoryGameObject(string uid)
+    {
+        var gameObject = GameObjects.SingleOrDefault(t => t.Uid == uid);
+
+        if (gameObject == null)
+        {
+            return;
+        }
+
+        GameObjects.Remove(gameObject);
+        GameObjectParams.Remove(gameObject.Uid);
+
+        if (OnDestoryGameObject != null)
+        {
+            OnDestoryGameObject.Invoke(gameObject);
+        }
+    }
+
+}

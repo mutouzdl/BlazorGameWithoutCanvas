@@ -1,9 +1,12 @@
 ﻿@namespace AntDesignGame
+@using System.Drawing
 
-<PropertyBar CurrentValue="50" />
-<div 
-	class=@($"actor actor{_state.ToString()}") 
-	style=@($"position: relative; background: url('assets/actor/{ActorId}.png') no-repeat; {_style}" )
->
-	<BulletManager @ref="@_bulletManager" />
+<div style="@Style">
+	@*<PropertyBar Size=@(new Size(100, 30)) CurrentValue="50" />*@
+	<div 
+		class=@($"actor actor{GameObject.State.ToString()}") 
+		style="@ActorStyle"
+	>
+		@*<BulletManager @ref="@_bulletManager" />*@
+	</div>
 </div>

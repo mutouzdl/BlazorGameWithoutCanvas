@@ -2,7 +2,7 @@
 
 namespace AntDesignGame;
 
-public class World
+public class GameLoop
 {
     public const int FPS = 30;
     public int FPS_DELAY => Convert.ToInt32(1000.0 / FPS);
@@ -10,7 +10,7 @@ public class World
     private bool _isRunning = false;
     private decimal _timeCounter = 0;
 
-    public event Func<object, WorldLogicEventArgs, Task> Logic;
+    public event Func<object, GameLoopLogicEventArgs, Task> Logic;
 
     public async void Start()
     {
@@ -34,10 +34,10 @@ public class World
 
             stopWatch.Stop();
 
-            var ms = stopWatch.Elapsed.TotalMilliseconds;
+            var logicCostMilliseconds = stopWatch.Elapsed.TotalMilliseconds;
 
-            var d = Convert.ToInt32(FPS_DELAY - ms);
-            if (d <= 1) d = 1;
+            var d = Convert.ToInt32(FPS_DELAY - logicCostMilliseconds);
+            if (d <= 0) d = 0;
 
             deltaTime = d / 1000f;
 
@@ -53,11 +53,11 @@ public class World
 
     public int CurrentFPS { get; private set; } = 0;
 
-    private async Task OnLogic(float deltaTime)
+    private async Task OnLogic(float elapsedTime)
     {
-        var e = new WorldLogicEventArgs()
+        var e = new GameLoopLogicEventArgs()
         {
-            DeltaTime = deltaTime,
+            ElapsedTime = elapsedTime,
         };
 
         await Logic.Invoke(this, e);
