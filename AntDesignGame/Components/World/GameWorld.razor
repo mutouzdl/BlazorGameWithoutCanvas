@@ -1,13 +1,21 @@
 ﻿@namespace AntDesignGame
 
-GameContext == null: @(GameContext == null)
 @if (GameContext != null)
 {
 	foreach(var gameObject in GameContext.GameObjects)
 	{
 		<DynamicComponent 
 			Type="@gameObject.WebComponentType" 
-			Parameters=@(GameContext.GameObjectParams[gameObject.Uid])
+			Parameters=@(gameObject.WebParameters)
 		/>
+		
+		for(int i = 0; i< gameObject.Transform.GetChildCount(); i++)
+		{
+			var childGameObject = gameObject.Transform.GetChild(i);
+			<DynamicComponent 
+				Type="@childGameObject.WebComponentType" 
+				Parameters=@(childGameObject.WebParameters)
+			/>
+		}
 	}
 }

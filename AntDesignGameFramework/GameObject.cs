@@ -8,7 +8,30 @@ namespace AntDesignGameFramework;
 /// </summary>
 public class GameObject : Object
 {
+    /// <summary>
+    /// Web组件类型
+    /// </summary>
     public Type WebComponentType { get; }
+
+    private Dictionary<string, object> _params;
+    /// <summary>
+    /// 提供给Web组件的参数
+    /// </summary>
+    public Dictionary<string, object> WebParameters
+    {
+        get
+        {
+            if (_params == null)
+            {
+                _params = new Dictionary<string, object>() {
+                    { "GameObject", this }
+                };
+            }
+
+            return _params;
+        }
+    }
+
     private static Size _defaultSize = new Size(10, 10);
     private ComponentsCollection Components { get; } = new ComponentsCollection();
 

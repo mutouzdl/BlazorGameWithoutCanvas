@@ -5,7 +5,6 @@ public abstract class GameContext
     public GameTime GameTime { get; } = new GameTime();
     public Display Display { get; } = new Display();
     public List<GameObject> GameObjects { get; } = new();
-    public Dictionary<string, Dictionary<string, object>> GameObjectParams { get; } = new();
 
     public event Action<GameObject> OnAddGameObject;
     public event Action<GameObject> OnDestoryGameObject;
@@ -28,9 +27,6 @@ public abstract class GameContext
         }
 
         GameObjects.Add(gameObject);
-        GameObjectParams[gameObject.Uid] = new Dictionary<string, object> {
-            { "GameObject", gameObject }
-        };
 
         if (OnAddGameObject != null)
         {
@@ -48,7 +44,6 @@ public abstract class GameContext
         }
 
         GameObjects.Remove(gameObject);
-        GameObjectParams.Remove(gameObject.Uid);
 
         if (OnDestoryGameObject != null)
         {

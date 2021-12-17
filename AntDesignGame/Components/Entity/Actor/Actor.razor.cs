@@ -8,6 +8,9 @@ public partial class Actor : ComponentBase
     [Parameter]
     public ActorGameObject GameObject { get; set; }
 
+    [Parameter]
+    public RenderFragment Children { get; set; }
+
     private string Style => $"position: absolute;" +
         $"left:{GameObject.Transform.Position.X}px;top:{GameObject.Transform.Position.Y}px; ";
 

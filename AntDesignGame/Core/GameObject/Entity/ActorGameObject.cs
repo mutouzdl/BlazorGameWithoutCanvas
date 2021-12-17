@@ -1,4 +1,6 @@
-﻿using AntDesignGameFramework;
+﻿using System.Drawing;
+using System.Numerics;
+using AntDesignGameFramework;
 
 namespace AntDesignGame;
 
@@ -11,12 +13,25 @@ public class ActorGameObject : GameObject
 
     public EnumActorState State { get; private set; } = EnumActorState.Stand;
 
+    private PropertyBarGameObject _propertyBarGameObject;
     private BulletManager _bulletManager;
 
     private double _timeCounter = 0;
 
     public ActorGameObject(Type webComponentType) : base(webComponentType)
     {
+        Init();
+    }
+
+    public void Init()
+    {
+        _propertyBarGameObject = new(typeof(PropertyBar));
+
+        _propertyBarGameObject.Transform.LocalPosition = new Vector2(0, -0);
+        _propertyBarGameObject.Transform.Size = new Size(100, 30);
+        _propertyBarGameObject.CurrentValue = 80;
+
+        Transform.AddChild(_propertyBarGameObject);
     }
 
     protected override async ValueTask OnUpdate(GameContext game)

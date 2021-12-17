@@ -16,5 +16,7 @@ public partial class PropertyBar
         _ => "#FF4136",
     };
 
-    private string Style => $"width: {GameObject.Transform.Size.Width}px;";
+    private string Style => $"position: absolute;" +
+        $"width:{GameObject.Transform.Size.Width}px;" +
+        $"left:{GameObject.Transform.Position.X}px;top:{GameObject.Transform.Position.Y}px;";
 }
