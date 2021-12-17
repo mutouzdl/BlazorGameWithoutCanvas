@@ -11,6 +11,13 @@ public class BulletManager
     private const int MAX_COUNT = 100;           // 最大空闲对象数量
     private const int MIN_COUNT = 25;           // 最小空闲对象数量
 
+    private GameObject _owner;
+
+    public BulletManager(GameObject owner)
+    {
+        _owner = owner;
+    }
+
     public async ValueTask Update(GameContext game)
     {
         //foreach (var bullet in _bulletList)
@@ -28,6 +35,10 @@ public class BulletManager
         {
             Speed = 150 * direction.X,
         };
+
+        /* 调整子弹位置，在人物中间发射 */
+        var localPos = bullet.Transform.LocalPosition;
+        bullet.Transform.LocalPosition = new Vector2(localPos.X, localPos.Y + _owner.Transform.Size.Height / 2);
 
         return bullet;
 

@@ -9,9 +9,14 @@ namespace FightGame
         private static readonly Size _imageSize = new Size(576, 384);
 
         private EnumActorState _state = EnumActorState.Stand;
-        private BulletManager _bulletManager = new();
+        private BulletManager _bulletManager;
 
         private double _timeCounter = 0;
+
+        public Actor()
+        {
+            _bulletManager = new(this);
+        }
 
         public void Init(string assetName)
         {

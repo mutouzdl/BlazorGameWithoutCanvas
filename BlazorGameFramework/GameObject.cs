@@ -30,6 +30,9 @@ public class GameObject : Object
 
     public async ValueTask Render(GameContext game)
     {
+        /* 超出游戏范围，不渲染 */
+
+
         foreach (var component in this.Components)
         {
             await component.Render(game);
