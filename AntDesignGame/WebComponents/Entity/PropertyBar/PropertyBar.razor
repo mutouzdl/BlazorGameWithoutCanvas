@@ -2,9 +2,11 @@
 @inherits GameWebComponent<PropertyBarGameObject>
 
 <Progress 
-	Style=@($"{SizeStyle} {PositionStyle}")
+	Style=@($"{GetPositionStyle()}")
 	Percent="@((double)Percent)" 
 	Size="@ProgressSize.Small" 
 	StrokeColor="@StrokeColor" 
+	TrailColor="black"
+	ShowInfo="false"
 />
 

@@ -9,6 +9,4 @@ public partial class PropertyBar : GameWebComponent<PropertyBarGameObject>
         EnumPropertyBarType.MP => "#0074D9",
         _ => "#FF4136",
     };
-
-    private string SizeStyle => $"width:{GameObject.Transform.Size.Width}px;";
 }

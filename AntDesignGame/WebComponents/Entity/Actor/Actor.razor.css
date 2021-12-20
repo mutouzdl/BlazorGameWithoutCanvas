@@ -2,7 +2,6 @@
 .actor {
     width: 64px;
     height: 64px;
-    margin: 50px auto;
 }
 
 @keyframes actorStand {

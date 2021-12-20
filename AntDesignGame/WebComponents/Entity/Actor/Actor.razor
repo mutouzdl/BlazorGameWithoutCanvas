@@ -2,7 +2,7 @@
 @inherits GameWebComponent<ActorGameObject>
 @using System.Drawing
 
-<div style="@PositionStyle">
+<div style="@GetPositionStyle()">
 	<div 
 		class=@($"actor actor{GameObject.State.ToString()}") 
 		style="@ActorStyle"

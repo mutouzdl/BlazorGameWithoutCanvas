@@ -28,8 +28,13 @@ public class ActorGameObject : GameObject
 
     private void Init()
     {
+        Transform.Size = new Size(64, 64);
+
         _propertyBarGameObject = new(typeof(PropertyBar));
 
+        _propertyBarGameObject.Transform.Pivot = new Vector2(0.5f, 1);
+        _propertyBarGameObject.Transform.AnchorMin = new Vector2(0.5f, 0);
+        _propertyBarGameObject.Transform.AnchorMax = new Vector2(0.5f, 0);
         _propertyBarGameObject.Transform.LocalPosition = new Vector2(0, -0);
         _propertyBarGameObject.Transform.Size = new Size(100, 30);
         _propertyBarGameObject.CurrentValue = 80;

@@ -15,6 +15,19 @@ public abstract class GameContext
         this.GameTime.ElapsedTime = elapsedTime;
 
         await Update();
+
+        UpdateGameObjectRenderRect();
+    }
+
+    /// <summary>
+    /// 更新游戏物体的渲染规格
+    /// </summary>
+    private void UpdateGameObjectRenderRect()
+    {
+        foreach (var gameObject in GameObjects)
+        {
+            gameObject.Transform.UpdateRenderRect();
+        }
     }
 
     protected abstract ValueTask Update();

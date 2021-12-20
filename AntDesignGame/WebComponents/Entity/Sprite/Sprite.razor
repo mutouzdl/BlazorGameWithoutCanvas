@@ -1,4 +1,9 @@
 ﻿@namespace AntDesignGame
 @inherits GameWebComponent<SpriteGameObject>
 
-<img style="@PositionStyle" src="@GameObject.AssetName" width="@GameObject.Transform.Size.Width" height="@GameObject.Transform.Size.Height" />
+<img 
+	style="@GetPositionStyle()" 
+	src="@GameObject.AssetName" 
+	width="@GameObject.Transform.Size.Width" 
+	height="@GameObject.Transform.Size.Height" 
+/>
