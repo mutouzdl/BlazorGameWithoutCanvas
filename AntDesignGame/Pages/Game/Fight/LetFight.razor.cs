@@ -61,5 +61,7 @@ public partial class LetFight : ComponentBase
         await _gameWorld.GameContext.Step(e.ElapsedTime);
 
         _gameWorld.Refresh();
+
+        StateHasChanged();
     }
 }

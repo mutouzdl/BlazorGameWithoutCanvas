@@ -2,25 +2,21 @@
 @namespace AntDesignGame
 @using System.Numerics
 
-<GameWorld @ref="@_gameWorld" />
 
-@*<Layout>
+<Layout>
 	<Header>
 		<div style="color: white;">
 			战斗模块尝试 FPS: @_fps
 		</div>
 	</Header>
     <Content>
-		<div style="width: 100%;height:100%;position: absolute;background: black">
 			<div class="bgDiv" style="position: relative;">
-				<Actor @ref="@_hero" ActorId="1064020302" Mirror Position=@(new Vector2(10, 120)) />
-				<Actor @ref="@_monster" ActorId="1019010301" Position=@(new Vector2(1000, 120)) />
+				<GameWorld @ref="@_gameWorld" />
 			</div>
-		</div>
 	</Content>
 	<Footer>
 		<div style="text-align: center;">
 			<a href="http://www.benmutou.com">www.benmutou.com</a>
 		</div>
 	</Footer>
-</Layout>*@
+</Layout>
