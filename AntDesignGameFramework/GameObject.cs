@@ -13,7 +13,7 @@ public class GameObject : Object
     /// </summary>
     public Type WebComponentType { get; }
 
-    public bool IsDestory { get; private set; } = false;
+    public bool IsDestroy { get; private set; } = false;
 
     private Dictionary<string, object> _params;
     /// <summary>
@@ -60,9 +60,11 @@ public class GameObject : Object
         await OnUpdate(game);
     }
 
-    public void Destory()
+    public void Destroy()
     {
-        IsDestory = true;
+        IsDestroy = true;
+
+        OnDestroy();
     }
 
     public void AddComponent(IComponent component)
@@ -167,6 +169,10 @@ public class GameObject : Object
     {
     }
 
+    protected virtual void OnDestroy() { }
+    protected virtual void OnAnimationStart() { }
+    protected virtual void OnAnimationIteration() { }
+    protected virtual void OnAnimationEnd() { }
     protected virtual async ValueTask OnUpdate(GameContext game) { }
 
     private Transform _transform = null;

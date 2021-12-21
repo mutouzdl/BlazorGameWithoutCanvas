@@ -25,7 +25,7 @@
 }
 
 .actorAttack {
-    animation: actorAttack 0.5s step-start infinite;
+    animation: actorAttack 0.5s step-start 1;
 }
 
 @keyframes actorHurt {
@@ -36,7 +36,11 @@
 }
 
 .actorHurt {
-    animation: actorHurt 0.3s step-start infinite;
+    animation-name: actorHurt;
+    animation-duration: 0.3s;
+    animation-timing-function: step-start;
+    animation-iteration-count: 1;
+
 }
 
 @keyframes actorDead {

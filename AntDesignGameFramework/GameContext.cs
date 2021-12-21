@@ -14,6 +14,9 @@ public abstract class GameContext
         this.GameTime.TotalTime += elapsedTime;
         this.GameTime.ElapsedTime = elapsedTime;
 
+        // 移除已销毁的对象
+        GameObjects.RemoveAll(t => t.IsDestroy);
+
         await Update();
 
         CheckCollision();
@@ -98,7 +101,7 @@ public abstract class GameContext
             return;
         }
 
-        gameObject.Destory();
+        gameObject.Destroy();
         GameObjects.Remove(gameObject);
 
         if (OnDestoryGameObject != null)

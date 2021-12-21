@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using AntDesign.JsInterop;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace AntDesignGame;
 
@@ -10,6 +12,11 @@ public partial class LetFight : ComponentBase
     private GameWorld _gameWorld;
 
     private int _fps = 0;
+
+    [Inject]
+    private IDomEventListener DomEventListener { get; set; }
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
 
     protected override void OnInitialized()
     {
@@ -26,6 +33,10 @@ public partial class LetFight : ComponentBase
         var gameContext = new DemoGameContext();
 
         gameContext.Display.Size = new Size(1200, 600);
+
+        Global.GameContext = gameContext;
+        Global.DomEventListener = DomEventListener;
+        Global.JSRuntime = JSRuntime;
 
         ActorGameObject actorGameObject = new ActorGameObject(typeof(Actor))
         {
@@ -46,8 +57,6 @@ public partial class LetFight : ComponentBase
 
         _gameWorld.SetGameContext(gameContext);
         _gameWorld.Refresh();
-
-        Global.GameContext = gameContext;
 
         _gameLoop = new();
         _gameLoop.Logic += Logic;

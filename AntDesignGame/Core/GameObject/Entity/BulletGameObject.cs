@@ -41,14 +41,14 @@ public class BulletGameObject : GameObject
 
     protected override void OnCollisionEnter(Collision collision)
     {
-        if (IsDestory)
+        if (IsDestroy)
         {
             return;
         }
 
         if (collision.GameObject is ActorGameObject && collision.GameObject.Uid != this.Transform.Parent.Owner.Uid)
         {
-            Destory();
+            Destroy();
         }
     }
 }

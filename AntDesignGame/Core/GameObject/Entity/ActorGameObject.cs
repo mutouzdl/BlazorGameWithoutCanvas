@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using AntDesignGameFramework;
+using Microsoft.JSInterop;
 
 namespace AntDesignGame;
 
@@ -55,6 +56,20 @@ public class ActorGameObject : GameObject
         AddComponent(_bulletManager);
     }
 
+    [JSInvokable]
+    public void AnimationStart(JSAnimationEvent e)
+    {
+    }
+
+    [JSInvokable]
+    public void AnimationEnd(JSAnimationEvent e)
+    {
+        if (State != EnumActorState.Stand)
+        {
+            Stand();
+        }
+    }
+
     protected override async ValueTask OnUpdate(GameContext game)
     {
         if (_bulletManager != null)
@@ -68,6 +83,8 @@ public class ActorGameObject : GameObject
                 var bulletGameObject = _bulletManager.GetOrAddBulletGameObject(Transform.Direction);
 
                 Transform.AddChild(bulletGameObject);
+
+                Attack();
             }
         }
     }
@@ -84,6 +101,7 @@ public class ActorGameObject : GameObject
             }
 
             _propertyBarGameObject.CurrentValue = HP;
+            ReceiveHurt();
         }
     }
 

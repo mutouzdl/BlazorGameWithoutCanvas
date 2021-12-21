@@ -97,7 +97,7 @@ public class Transform : BaseComponent
 
     public override async ValueTask Update(GameContext game)
     {
-        _children.RemoveAll(t => t.IsDestory);
+        _children.RemoveAll(t => t.IsDestroy);
     }
 
     public void AddChild(GameObject child)
