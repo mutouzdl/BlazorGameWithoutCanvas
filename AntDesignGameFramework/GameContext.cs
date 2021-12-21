@@ -16,7 +16,49 @@ public abstract class GameContext
 
         await Update();
 
+        CheckCollision();
+
         UpdateGameObjectRenderRect();
+    }
+
+    /// <summary>
+    /// 检查碰撞
+    /// </summary>
+    private void CheckCollision()
+    {
+        var boundingBoxs = new List<BoundingBox>();
+
+        foreach (var gameObject in GameObjects)
+        {
+            var components = gameObject.GetAllComponents<BoundingBox>(true);
+
+            if (components.Length > 0)
+            {
+                boundingBoxs.AddRange(components);
+            }
+        }
+
+        foreach (var boundingBox in boundingBoxs)
+        {
+            foreach (var otherBoundingBox in boundingBoxs)
+            {
+                if (boundingBox.Owner == otherBoundingBox.Owner)
+                {
+                    continue;
+                }
+
+                if (!boundingBox.Bounds.IntersectsWith(otherBoundingBox.Bounds))
+                {
+                    boundingBox.ExitCollisionBox(otherBoundingBox);
+                    otherBoundingBox.ExitCollisionBox(boundingBox);
+
+                    continue;
+                }
+
+                boundingBox.BindCollisionBox(otherBoundingBox);
+                otherBoundingBox.BindCollisionBox(boundingBox);
+            }
+        }
     }
 
     /// <summary>
@@ -56,6 +98,7 @@ public abstract class GameContext
             return;
         }
 
+        gameObject.Destory();
         GameObjects.Remove(gameObject);
 
         if (OnDestoryGameObject != null)

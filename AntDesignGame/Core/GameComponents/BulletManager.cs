@@ -19,7 +19,7 @@ public class BulletManager : BaseComponent
     {
         BulletGameObject bulletGameObject = new(typeof(Bullet), "1")
         {
-            Speed = 50,
+            Speed = 150,
         };
 
         bulletGameObject.Transform.Direction = direction;

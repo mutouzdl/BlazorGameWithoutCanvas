@@ -13,6 +13,8 @@ public class GameObject : Object
     /// </summary>
     public Type WebComponentType { get; }
 
+    public bool IsDestory { get; private set; } = false;
+
     private Dictionary<string, object> _params;
     /// <summary>
     /// 提供给Web组件的参数
@@ -58,6 +60,11 @@ public class GameObject : Object
         await OnUpdate(game);
     }
 
+    public void Destory()
+    {
+        IsDestory = true;
+    }
+
     public void AddComponent(IComponent component)
     {
         component.SetOwner(this);
@@ -81,6 +88,83 @@ public class GameObject : Object
         }
 
         return component;
+    }
+
+    /// <summary>
+    /// 获取所有同类型的组件
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="recursion">是否递归子对象的组件</param>
+    /// <returns></returns>
+    public T[] GetAllComponents<T>(bool recursion = false) where T : class, IComponent
+    {
+        var result = new List<T>();
+        var component = GetComponent<T>();
+
+        if (component != null)
+        {
+            result.Add(component);
+        }
+
+        if (recursion)
+        {
+            var childResult = GetAllChildComponents<T>(Transform, recursion);
+            if (childResult.Count > 0)
+            {
+                result.AddRange(childResult);
+            }
+        }
+
+        return result.ToArray();
+    }
+
+    private List<T> GetAllChildComponents<T>(Transform current, bool recursion = false) where T : class, IComponent
+    {
+        var result = new List<T>();
+
+        for (int i = 0; i < current.GetChildCount(); i++)
+        {
+            var child = current.GetChild(i);
+            var component = child.GetComponent<T>();
+
+            if (component != null)
+            {
+                result.Add(component);
+            }
+
+            if (recursion && child.Transform.GetChildCount() > 0)
+            {
+                var childResult = GetAllChildComponents<T>(child.Transform, recursion);
+                if (childResult.Count > 0)
+                {
+                    result.AddRange(childResult);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 碰撞开始
+    /// </summary>
+    /// <param name="collision"></param>
+    internal protected virtual void OnCollisionEnter(Collision collision)
+    {
+    }
+    /// <summary>
+    /// 碰撞结束
+    /// </summary>
+    /// <param name="collision"></param>
+    internal protected virtual void OnCollisionExit(Collision collision)
+    {
+    }
+    /// <summary>
+    /// 碰撞中
+    /// </summary>
+    /// <param name="collision"></param>
+    internal protected virtual void OnCollisionStay(Collision collision)
+    {
     }
 
     protected virtual async ValueTask OnUpdate(GameContext game) { }

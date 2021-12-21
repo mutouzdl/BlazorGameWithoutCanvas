@@ -14,12 +14,17 @@ public class ActorGameObject : GameObject
     /// </summary>
     public bool ImageMirror { get; set; } = false;
 
+    /// <summary>
+    /// TODO 临时的HP变量，以后要封装
+    /// </summary>
+    public int HP { get; set; } = 100;
+
     public EnumActorState State { get; private set; } = EnumActorState.Stand;
 
     private PropertyBarGameObject _propertyBarGameObject;
     private BulletManager _bulletManager;
 
-    private double _timeCounter = 0;
+    private double _timeCounter = 3;
 
     public ActorGameObject(Type webComponentType) : base(webComponentType)
     {
@@ -37,9 +42,14 @@ public class ActorGameObject : GameObject
         _propertyBarGameObject.Transform.AnchorMax = new Vector2(0.5f, 0);
         _propertyBarGameObject.Transform.LocalPosition = new Vector2(0, -0);
         _propertyBarGameObject.Transform.Size = new Size(100, 30);
-        _propertyBarGameObject.CurrentValue = 80;
+        _propertyBarGameObject.MaxValue = HP;
+        _propertyBarGameObject.CurrentValue = HP;
 
         Transform.AddChild(_propertyBarGameObject);
+
+        var boundingBox = new BoundingBox(this);
+        boundingBox.SetSize(Transform.Size);
+        AddComponent(boundingBox);
 
         _bulletManager = new BulletManager();
         AddComponent(_bulletManager);
@@ -51,7 +61,7 @@ public class ActorGameObject : GameObject
         {
             _timeCounter += game.GameTime.ElapsedTime;
 
-            if (_timeCounter > 2)
+            if (_timeCounter > 3)
             {
                 _timeCounter = 0;
 
@@ -59,6 +69,21 @@ public class ActorGameObject : GameObject
 
                 Transform.AddChild(bulletGameObject);
             }
+        }
+    }
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        if (collision.GameObject is BulletGameObject && collision.GameObject.Transform.Parent.Owner.Uid != this.Uid)
+        {
+            HP -= 2;
+
+            if (HP < 0)
+            {
+                HP = 0;
+            }
+
+            _propertyBarGameObject.CurrentValue = HP;
         }
     }
 

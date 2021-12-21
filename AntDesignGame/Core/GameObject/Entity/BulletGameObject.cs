@@ -26,6 +26,10 @@ public class BulletGameObject : GameObject
         spriteGameObject.AssetName = $"assets/bullet/bullet{BulletId}.png";
 
         Transform.AddChild(spriteGameObject);
+
+        var boundingBox = new BoundingBox(this);
+        boundingBox.SetSize(spriteGameObject.Transform.Size);
+        AddComponent(boundingBox);
     }
 
     protected override async ValueTask OnUpdate(GameContext game)
@@ -33,5 +37,18 @@ public class BulletGameObject : GameObject
         Transform.LocalPosition = new Vector2(
             Transform.LocalPosition.X + (Speed * game.GameTime.ElapsedTime * Transform.Direction.X),
             Transform.LocalPosition.Y);
+    }
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        if (IsDestory)
+        {
+            return;
+        }
+
+        if (collision.GameObject is ActorGameObject && collision.GameObject.Uid != this.Transform.Parent.Owner.Uid)
+        {
+            Destory();
+        }
     }
 }

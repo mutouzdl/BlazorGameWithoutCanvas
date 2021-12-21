@@ -8,22 +8,6 @@ namespace AntDesignGameFramework;
 /// </summary>
 public class Transform : BaseComponent
 {
-    public struct RectTransform
-    {
-        public float X { get; } = 0;
-        public float Y { get; } = 0;
-        public int Width { get; } = 0;
-        public int Height { get; } = 0;
-
-        public RectTransform(float x, float y, int width, int height)
-        {
-            X = x;
-            Y = y;
-            Width = width;
-            Height = height;
-        }
-    }
-
     private Vector2 _localPosition = Vector2.Zero;
     public Vector2 LocalPosition
     {
@@ -111,6 +95,11 @@ public class Transform : BaseComponent
         return _children[index];
     }
 
+    public override async ValueTask Update(GameContext game)
+    {
+        _children.RemoveAll(t => t.IsDestory);
+    }
+
     public void AddChild(GameObject child)
     {
         if (_children.Any(t => t.Uid == child.Uid))
@@ -122,6 +111,42 @@ public class Transform : BaseComponent
         child.Transform.Parent = this;
 
         UpdateChildPosition(child);
+    }
+
+    public GameObject[] GetAllChildren(bool recursion = false)
+    {
+        var children = new List<GameObject>();
+
+        var childResult = GetAllChildren(this, recursion);
+        if (childResult.Length > 0)
+        {
+            children.AddRange(childResult);
+        }
+
+        return children.ToArray();
+    }
+
+    private GameObject[] GetAllChildren(Transform current, bool recursion = false)
+    {
+        var children = new List<GameObject>();
+
+        children.AddRange(current._children);
+
+        if (recursion)
+        {
+            for (int i = 0; i < current.GetChildCount(); i++)
+            {
+                var child = GetChild(i);
+
+                var childResult = GetAllChildren(child.Transform, recursion);
+                if (childResult.Length > 0)
+                {
+                    children.AddRange(childResult);
+                }
+            }
+        }
+
+        return children.ToArray();
     }
 
     public void SetParent(GameObject parent)
