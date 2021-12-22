@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
+using Microsoft.JSInterop;
 
 namespace AntDesignGameFramework;
 
@@ -167,6 +168,24 @@ public class GameObject : Object
     /// <param name="collision"></param>
     internal protected virtual void OnCollisionStay(Collision collision)
     {
+    }
+
+    [JSInvokable]
+    public void AnimationStart(JSAnimationEvent e)
+    {
+        OnAnimationStart();
+    }
+
+    [JSInvokable]
+    public void AnimationIteration(JSAnimationEvent e)
+    {
+        OnAnimationIteration();
+    }
+
+    [JSInvokable]
+    public void AnimationEnd(JSAnimationEvent e)
+    {
+        OnAnimationEnd();
     }
 
     protected virtual void OnDestroy() { }

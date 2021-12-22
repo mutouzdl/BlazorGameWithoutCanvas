@@ -1,6 +1,4 @@
-﻿using Microsoft.JSInterop;
-
-namespace AntDesignGame;
+﻿namespace AntDesignGame;
 
 
 public partial class Actor : GameWebComponent<ActorGameObject>
@@ -13,23 +11,7 @@ public partial class Actor : GameWebComponent<ActorGameObject>
     {
         if (firstRender)
         {
-            var dotNetObjRef = DotNetObjectReference.Create(GameObject);
-            var jsFuncName = "addDomEventListener";
-            var elementSelector = $"#actor_{GameObject.Uid}";
-
-            await Global.JSRuntime.InvokeAsync<object>(
-                  jsFuncName,
-                  elementSelector,
-                  "webkitAnimationStart",
-                  dotNetObjRef,
-                  "AnimationStart");
-
-            await Global.JSRuntime.InvokeAsync<object>(
-                  jsFuncName,
-                  elementSelector,
-                  "webkitAnimationEnd",
-                  dotNetObjRef,
-                  "AnimationEnd");
+            await ListenAnimationEnd();
         }
     }
 

@@ -11,7 +11,7 @@ public partial class LetFight : ComponentBase
     private GameLoop _gameLoop;
     private GameWorld _gameWorld;
 
-    private int _fps = 0;
+    private float _fps = 0;
 
     [Inject]
     private IDomEventListener DomEventListener { get; set; }
@@ -49,7 +49,7 @@ public partial class LetFight : ComponentBase
         {
             ActorId = "1019010301",
         };
-        monsterGameObject.Transform.LocalPosition = new Vector2(300, 220);
+        monsterGameObject.Transform.LocalPosition = new Vector2(800, 220);
         monsterGameObject.Transform.Direction = Vector2.UnitX * -1;
 
         gameContext.AddGameObject(actorGameObject);
@@ -65,7 +65,7 @@ public partial class LetFight : ComponentBase
 
     private async Task Logic(object sender, GameLoopLogicEventArgs e)
     {
-        _fps = _gameLoop.CurrentFPS;
+        _fps = 1.0f / e.ElapsedTime;
 
         await _gameWorld.GameContext.Step(e.ElapsedTime);
 

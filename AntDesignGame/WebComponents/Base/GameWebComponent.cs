@@ -1,5 +1,6 @@
 ﻿using AntDesignGameFramework;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace AntDesignGame;
 
@@ -24,4 +25,47 @@ public class GameWebComponent<TGameObject> : ComponentBase
             ;
     }
 
+    protected async Task ListenAnimationStart()
+    {
+
+        var dotNetObjRef = DotNetObjectReference.Create(GameObject);
+        var jsFuncName = "addDomEventListener";
+        var elementSelector = $"#anim_{GameObject.Uid}";
+
+        await Global.JSRuntime.InvokeAsync<object>(
+              jsFuncName,
+              elementSelector,
+              "webkitAnimationStart",
+              dotNetObjRef,
+              "AnimationStart");
+    }
+
+    protected async Task ListenAnimationIteration()
+    {
+        var dotNetObjRef = DotNetObjectReference.Create(GameObject);
+        var jsFuncName = "addDomEventListener";
+        var elementSelector = $"#anim_{GameObject.Uid}";
+
+        await Global.JSRuntime.InvokeAsync<object>(
+              jsFuncName,
+              elementSelector,
+              "webkitAnimationIteration",
+              dotNetObjRef,
+              "AnimationIteration");
+    }
+
+    protected async Task ListenAnimationEnd()
+    {
+
+        var dotNetObjRef = DotNetObjectReference.Create(GameObject);
+        var jsFuncName = "addDomEventListener";
+        var elementSelector = $"#anim_{GameObject.Uid}";
+
+        await Global.JSRuntime.InvokeAsync<object>(
+              jsFuncName,
+              elementSelector,
+              "webkitAnimationEnd",
+              dotNetObjRef,
+              "AnimationEnd");
+    }
 }

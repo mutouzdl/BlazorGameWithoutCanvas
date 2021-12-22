@@ -21,6 +21,7 @@ public class GameLoop
 
         _isRunning = true;
 
+        Stopwatch deltaWatch = new Stopwatch();
         Stopwatch stopWatch = new Stopwatch();
         float deltaTime = 0;
         while (_isRunning || _timeCounter > 0)
@@ -30,6 +31,12 @@ public class GameLoop
             stopWatch.Reset();
             stopWatch.Start();
 
+            deltaWatch.Stop();
+
+            deltaTime = (float)deltaWatch.Elapsed.TotalSeconds;
+
+            deltaWatch.Reset();
+            deltaWatch.Start();
             await OnLogic(deltaTime);
 
             stopWatch.Stop();
@@ -39,10 +46,7 @@ public class GameLoop
             var d = Convert.ToInt32(FPS_DELAY - logicCostMilliseconds);
             if (d <= 1) d = 1;
 
-            deltaTime = d / 1000f;
-
             await Task.Delay(d);
-            CurrentFPS = Convert.ToInt32(1000.0 / d);
         }
     }
 
@@ -50,8 +54,6 @@ public class GameLoop
     {
         _isRunning = false;
     }
-
-    public int CurrentFPS { get; private set; } = 0;
 
     private async Task OnLogic(float elapsedTime)
     {

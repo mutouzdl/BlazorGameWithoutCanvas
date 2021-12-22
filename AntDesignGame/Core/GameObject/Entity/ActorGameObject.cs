@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using AntDesignGameFramework;
-using Microsoft.JSInterop;
 
 namespace AntDesignGame;
 
@@ -56,13 +55,7 @@ public class ActorGameObject : GameObject
         AddComponent(_bulletManager);
     }
 
-    [JSInvokable]
-    public void AnimationStart(JSAnimationEvent e)
-    {
-    }
-
-    [JSInvokable]
-    public void AnimationEnd(JSAnimationEvent e)
+    protected override void OnAnimationEnd()
     {
         if (State != EnumActorState.Stand)
         {
@@ -76,7 +69,7 @@ public class ActorGameObject : GameObject
         {
             _timeCounter += game.GameTime.ElapsedTime;
 
-            if (_timeCounter > 3)
+            if (_timeCounter > 0.1f)
             {
                 _timeCounter = 0;
 
