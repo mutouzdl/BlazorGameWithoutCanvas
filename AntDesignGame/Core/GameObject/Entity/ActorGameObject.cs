@@ -13,11 +13,9 @@ public class ActorGameObject : GameObject
     /// 图片是否镜像翻转
     /// </summary>
     public bool ImageMirror { get; set; } = false;
+    public bool IsDead { get; private set; } = false;
 
-    /// <summary>
-    /// TODO 临时的HP变量，以后要封装
-    /// </summary>
-    public int HP { get; set; } = 100;
+    public FightProperty FightProperty { get; private set; } = new FightProperty();
 
     public EnumActorState State { get; private set; } = EnumActorState.Stand;
 
@@ -28,10 +26,9 @@ public class ActorGameObject : GameObject
 
     public ActorGameObject(Type webComponentType) : base(webComponentType)
     {
-        Init();
     }
 
-    private void Init()
+    public void Init()
     {
         Transform.Size = new Size(64, 64);
 
@@ -42,8 +39,8 @@ public class ActorGameObject : GameObject
         _propertyBarGameObject.Transform.AnchorMax = new Vector2(0.5f, 0);
         _propertyBarGameObject.Transform.LocalPosition = new Vector2(0, -0);
         _propertyBarGameObject.Transform.Size = new Size(100, 30);
-        _propertyBarGameObject.MaxValue = HP;
-        _propertyBarGameObject.CurrentValue = HP;
+        _propertyBarGameObject.MaxValue = FightProperty.HP;
+        _propertyBarGameObject.CurrentValue = FightProperty.HP;
 
         Transform.AddChild(_propertyBarGameObject);
 
@@ -59,7 +56,14 @@ public class ActorGameObject : GameObject
     {
         if (State != EnumActorState.Stand)
         {
-            Stand();
+            if (State == EnumActorState.Dead)
+            {
+                Destroy();
+            }
+            else
+            {
+                Stand();
+            }
         }
     }
 
@@ -69,11 +73,11 @@ public class ActorGameObject : GameObject
         {
             _timeCounter += game.GameTime.ElapsedTime;
 
-            if (_timeCounter > 0.1f)
+            if (_timeCounter > 1f)
             {
                 _timeCounter = 0;
 
-                var bulletGameObject = _bulletManager.GetOrAddBulletGameObject(Transform.Direction);
+                var bulletGameObject = _bulletManager.GetOrAddBulletGameObject(Transform.Direction, FightProperty.Atk);
 
                 Transform.AddChild(bulletGameObject);
 
@@ -84,17 +88,33 @@ public class ActorGameObject : GameObject
 
     protected override void OnCollisionEnter(Collision collision)
     {
+        if (IsDead)
+        {
+            return;
+        }
+
         if (collision.GameObject is BulletGameObject && collision.GameObject.Transform.Parent.Owner.Uid != this.Uid)
         {
-            HP -= 2;
+            var bulletGameObject = (BulletGameObject)collision.GameObject;
 
-            if (HP < 0)
+            FightProperty.HP -= bulletGameObject.Atk - FightProperty.Def;
+
+            if (FightProperty.HP < 0)
             {
-                HP = 0;
+                FightProperty.HP = 0;
+                IsDead = true;
             }
 
-            _propertyBarGameObject.CurrentValue = HP;
-            ReceiveHurt();
+            _propertyBarGameObject.CurrentValue = FightProperty.HP;
+
+            if (IsDead)
+            {
+                Dead();
+            }
+            else
+            {
+                ReceiveHurt();
+            }
         }
     }
 

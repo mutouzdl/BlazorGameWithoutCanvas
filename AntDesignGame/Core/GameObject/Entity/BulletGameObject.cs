@@ -9,11 +9,13 @@ public class BulletGameObject : GameObject
 {
     public float Speed { get; set; }
     public string BulletId { get; private set; }
+    public int Atk { get; private set; }
 
 
-    public BulletGameObject(Type webComponentType, string bulletId) : base(webComponentType)
+    public BulletGameObject(Type webComponentType, string bulletId, int atk) : base(webComponentType)
     {
         BulletId = bulletId;
+        Atk = atk;
 
         Init();
     }
@@ -34,9 +36,21 @@ public class BulletGameObject : GameObject
 
     protected override async ValueTask OnUpdate(GameContext game)
     {
+        if (IsDestroy)
+        {
+            return;
+        }
+
+        if (game.Display.IsOutOfRange(Transform.Rect))
+        {
+            Destroy();
+            return;
+        }
+
         Transform.LocalPosition = new Vector2(
             Transform.LocalPosition.X + (Speed * game.GameTime.ElapsedTime * Transform.Direction.X),
             Transform.LocalPosition.Y);
+
     }
 
     protected override void OnCollisionEnter(Collision collision)

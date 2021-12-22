@@ -15,9 +15,9 @@ public class BulletManager : BaseComponent
     //{
     //}
 
-    public BulletGameObject GetOrAddBulletGameObject(Vector2 direction)
+    public BulletGameObject GetOrAddBulletGameObject(Vector2 direction, int atk)
     {
-        BulletGameObject bulletGameObject = new(typeof(Bullet), "1")
+        BulletGameObject bulletGameObject = new(typeof(Bullet), "1", atk)
         {
             Speed = 150,
         };

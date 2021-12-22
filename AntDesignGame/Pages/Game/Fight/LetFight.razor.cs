@@ -38,21 +38,33 @@ public partial class LetFight : ComponentBase
         Global.DomEventListener = DomEventListener;
         Global.JSRuntime = JSRuntime;
 
-        ActorGameObject actorGameObject = new ActorGameObject(typeof(Actor))
+        // 创建英雄
+        ActorGameObject heroGameObject = new ActorGameObject(typeof(Actor))
         {
             ActorId = "1064020302",
             ImageMirror = true,
         };
-        actorGameObject.Transform.LocalPosition = new Vector2(100, 220);
+        heroGameObject.Transform.LocalPosition = new Vector2(100, 220);
+        heroGameObject.FightProperty.Atk = 5;
+        heroGameObject.FightProperty.AtkDelay = 1;
+        heroGameObject.FightProperty.Def = 1;
+        heroGameObject.FightProperty.HP = 100;
+        heroGameObject.Init();
 
+        // 创建敌人
         ActorGameObject monsterGameObject = new ActorGameObject(typeof(Actor))
         {
             ActorId = "1019010301",
         };
         monsterGameObject.Transform.LocalPosition = new Vector2(800, 220);
         monsterGameObject.Transform.Direction = Vector2.UnitX * -1;
+        monsterGameObject.FightProperty.Atk = 3;
+        monsterGameObject.FightProperty.AtkDelay = 2;
+        monsterGameObject.FightProperty.Def = 1;
+        monsterGameObject.FightProperty.HP = 50;
+        monsterGameObject.Init();
 
-        gameContext.AddGameObject(actorGameObject);
+        gameContext.AddGameObject(heroGameObject);
         gameContext.AddGameObject(monsterGameObject);
 
         _gameWorld.SetGameContext(gameContext);
