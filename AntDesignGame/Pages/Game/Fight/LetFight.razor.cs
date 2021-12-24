@@ -43,29 +43,21 @@ public partial class LetFight : ComponentBase
         {
             ActorId = "1064020302",
             ImageMirror = true,
+            Tag = "hero",
         };
         heroGameObject.Transform.LocalPosition = new Vector2(100, 220);
-        heroGameObject.FightProperty.Atk = 5;
-        heroGameObject.FightProperty.AtkDelay = 1;
+        heroGameObject.FightProperty.Atk = 135;
+        heroGameObject.FightProperty.AtkDelay = 3.5f;
         heroGameObject.FightProperty.Def = 1;
         heroGameObject.FightProperty.HP = 100;
         heroGameObject.Init();
 
-        // 创建敌人
-        ActorGameObject monsterGameObject = new ActorGameObject(typeof(Actor))
-        {
-            ActorId = "1019010301",
-        };
-        monsterGameObject.Transform.LocalPosition = new Vector2(800, 220);
-        monsterGameObject.Transform.Direction = Vector2.UnitX * -1;
-        monsterGameObject.FightProperty.Atk = 3;
-        monsterGameObject.FightProperty.AtkDelay = 2;
-        monsterGameObject.FightProperty.Def = 1;
-        monsterGameObject.FightProperty.HP = 50;
-        monsterGameObject.Init();
-
         gameContext.AddGameObject(heroGameObject);
-        gameContext.AddGameObject(monsterGameObject);
+
+        // 创建敌人
+        gameContext.AddGameObject(CreateMonster("monster", 400, 220, 50));
+        gameContext.AddGameObject(CreateMonster("monster", 500, 320, 250));
+        gameContext.AddGameObject(CreateMonster("monster", 800, 520, 150));
 
         _gameWorld.SetGameContext(gameContext);
         _gameWorld.Refresh();
@@ -73,6 +65,26 @@ public partial class LetFight : ComponentBase
         _gameLoop = new();
         _gameLoop.Logic += Logic;
         _gameLoop.Start();
+    }
+
+    private ActorGameObject CreateMonster(string tag, float x, float y, int hp)
+    {
+
+        ActorGameObject monsterGameObject = new ActorGameObject(typeof(Actor))
+        {
+            ActorId = "1019010301",
+            Tag = tag,
+        };
+        monsterGameObject.Transform.LocalPosition = new Vector2(x, y);
+        monsterGameObject.Transform.Direction = Vector2.UnitX * -1;
+        monsterGameObject.FightProperty.Atk = 3;
+        monsterGameObject.FightProperty.AtkDelay = 11112;
+        monsterGameObject.FightProperty.Def = 1;
+        monsterGameObject.FightProperty.HP = hp;
+        monsterGameObject.Init();
+
+        Console.WriteLine($"创建怪物，UID:{monsterGameObject.Uid} Tag:{monsterGameObject.Tag}/{tag}");
+        return monsterGameObject;
     }
 
     private async Task Logic(object sender, GameLoopLogicEventArgs e)

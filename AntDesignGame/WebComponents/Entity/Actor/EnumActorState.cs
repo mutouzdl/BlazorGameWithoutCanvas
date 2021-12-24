@@ -2,6 +2,7 @@
 
 public enum EnumActorState
 {
+    NotInit,
     Stand,
     Attack,
     Hurt,

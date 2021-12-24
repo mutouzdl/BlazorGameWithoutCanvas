@@ -17,7 +17,7 @@ public class ActorGameObject : GameObject
 
     public FightProperty FightProperty { get; private set; } = new FightProperty();
 
-    public EnumActorState State { get; private set; } = EnumActorState.Stand;
+    public EnumActorState State { get; private set; } = EnumActorState.NotInit;
 
     private PropertyBarGameObject _propertyBarGameObject;
     private BulletManager _bulletManager;
@@ -50,40 +50,97 @@ public class ActorGameObject : GameObject
 
         _bulletManager = new BulletManager();
         AddComponent(_bulletManager);
+
+        if (Tag == "hero")
+            _timeCounter = FightProperty.AtkDelay;
+
+        State = EnumActorState.Stand;
     }
 
-    protected override void OnAnimationEnd()
+    protected override void OnAnimationEnd(JSAnimationEvent e)
     {
+        if (IsDestroy)
+        {
+            return;
+        }
+
+        if (State == EnumActorState.Dead)
+        {
+            Destroy();
+        }
+
+        if (IsDead)
+        {
+            return;
+        }
+
         if (State != EnumActorState.Stand)
         {
-            if (State == EnumActorState.Dead)
-            {
-                Destroy();
-            }
-            else
-            {
-                Stand();
-            }
+            Stand();
         }
     }
 
     protected override async ValueTask OnUpdate(GameContext game)
     {
+        if (State == EnumActorState.NotInit)
+        {
+            return;
+        }
+
+        if (IsDestroy || IsDead)
+        {
+            return;
+        }
+
         if (_bulletManager != null)
         {
             _timeCounter += game.GameTime.ElapsedTime;
 
-            if (_timeCounter > 1f)
+            if (_timeCounter > FightProperty.AtkDelay)
             {
+                var targets = GetNextAtkTargets(game);
+
+                if (targets.Length == 0)
+                {
+                    return;
+                }
+
                 _timeCounter = 0;
 
-                var bulletGameObject = _bulletManager.GetOrAddBulletGameObject(Transform.Direction, FightProperty.Atk);
+                foreach (var target in targets)
+                {
+                    var bulletGameObject = _bulletManager.GetOrAddBulletGameObject(
+                        new Random().Next(1, 6), Transform.Direction, FightProperty.Atk, target);
 
-                Transform.AddChild(bulletGameObject);
+                    Transform.AddChild(bulletGameObject);
+                }
 
                 Attack();
             }
         }
+    }
+
+    private GameObject[] GetNextAtkTargets(GameContext game)
+    {
+        var objs = new List<GameObject>();
+        foreach (var gameObject in game.GameObjects)
+        {
+            var actorGameObj = gameObject as ActorGameObject;
+
+            if (actorGameObj == null || actorGameObj.IsDead)
+            {
+                continue;
+            }
+
+            var tag = actorGameObj.Tag?.ToLower();
+            if ((Tag == "hero" && tag == "monster")
+                || Tag == "monster" && tag == "hero")
+            {
+                objs.Add(actorGameObj);
+            }
+        }
+
+        return objs.ToArray();
     }
 
     protected override void OnCollisionEnter(Collision collision)
@@ -99,7 +156,7 @@ public class ActorGameObject : GameObject
 
             FightProperty.HP -= bulletGameObject.Atk - FightProperty.Def;
 
-            if (FightProperty.HP < 0)
+            if (FightProperty.HP <= 0)
             {
                 FightProperty.HP = 0;
                 IsDead = true;

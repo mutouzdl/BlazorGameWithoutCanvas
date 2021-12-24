@@ -15,6 +15,16 @@ public class GameWebComponent<TGameObject> : ComponentBase
     [Parameter]
     public TGameObject GameObject { get; set; }
 
+    ~GameWebComponent()
+    {
+        OnDispose();
+    }
+
+    protected virtual void OnDispose()
+    {
+
+    }
+
     protected string GetPositionStyle()
     {
         var rect = GameObject.Transform.Rect;
@@ -27,45 +37,66 @@ public class GameWebComponent<TGameObject> : ComponentBase
 
     protected async Task ListenAnimationStart()
     {
-
-        var dotNetObjRef = DotNetObjectReference.Create(GameObject);
-        var jsFuncName = "addDomEventListener";
-        var elementSelector = $"#anim_{GameObject.Uid}";
-
-        await Global.JSRuntime.InvokeAsync<object>(
-              jsFuncName,
-              elementSelector,
-              "webkitAnimationStart",
-              dotNetObjRef,
-              "AnimationStart");
+        await AddAnimationEventListener("Start");
     }
 
     protected async Task ListenAnimationIteration()
     {
-        var dotNetObjRef = DotNetObjectReference.Create(GameObject);
-        var jsFuncName = "addDomEventListener";
-        var elementSelector = $"#anim_{GameObject.Uid}";
-
-        await Global.JSRuntime.InvokeAsync<object>(
-              jsFuncName,
-              elementSelector,
-              "webkitAnimationIteration",
-              dotNetObjRef,
-              "AnimationIteration");
+        await AddAnimationEventListener("Iteration");
     }
 
     protected async Task ListenAnimationEnd()
     {
+        await AddAnimationEventListener("End");
+    }
 
-        var dotNetObjRef = DotNetObjectReference.Create(GameObject);
+    protected async Task RemoveListenAnimationStart()
+    {
+        await RemoveAnimationEventListener("Start");
+    }
+
+    protected async Task RemoveListenAnimationIteration()
+    {
+        await RemoveAnimationEventListener("Iteration");
+    }
+
+    protected async Task RemoveListenAnimationEnd()
+    {
+        await RemoveAnimationEventListener("End");
+    }
+
+    private async Task AddAnimationEventListener(string state)
+    {
         var jsFuncName = "addDomEventListener";
         var elementSelector = $"#anim_{GameObject.Uid}";
 
         await Global.JSRuntime.InvokeAsync<object>(
               jsFuncName,
               elementSelector,
-              "webkitAnimationEnd",
-              dotNetObjRef,
-              "AnimationEnd");
+              $"webkitAnimation{state}",
+              DotNetObjectRef,
+              $"Animation{state}");
+    }
+
+    private async Task RemoveAnimationEventListener(string state)
+    {
+        var jsFuncName = "removeDomEventListener";
+        var elementSelector = $"#anim_{GameObject.Uid}";
+
+        await Global.JSRuntime.InvokeAsync<object>(
+              jsFuncName,
+              elementSelector,
+              $"webkitAnimation{state}");
+    }
+
+    private DotNetObjectReference<TGameObject> _dotNetObjectRef;
+    private DotNetObjectReference<TGameObject> DotNetObjectRef
+    {
+        get
+        {
+            _dotNetObjectRef = _dotNetObjectRef ?? DotNetObjectReference.Create(GameObject);
+
+            return _dotNetObjectRef;
+        }
     }
 }

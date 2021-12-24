@@ -11,8 +11,15 @@ public partial class Actor : GameWebComponent<ActorGameObject>
     {
         if (firstRender)
         {
+            Console.WriteLine($"Actor ListenAnimationEnd uid:{GameObject.Uid}");
             await ListenAnimationEnd();
         }
     }
 
+    protected override void OnDispose()
+    {
+        base.OnDispose();
+
+        RemoveListenAnimationEnd();
+    }
 }

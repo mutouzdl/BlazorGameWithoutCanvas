@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using AntDesignGameFramework;
+using AntDesignGameFramework.Utility;
 
 namespace AntDesignGame;
 
@@ -8,14 +9,14 @@ namespace AntDesignGame;
 public class BulletGameObject : GameObject
 {
     public float Speed { get; set; }
+    public int Atk { get; set; }
+    public GameObject Target { get; set; }
     public string BulletId { get; private set; }
-    public int Atk { get; private set; }
 
 
-    public BulletGameObject(Type webComponentType, string bulletId, int atk) : base(webComponentType)
+    public BulletGameObject(Type webComponentType, string bulletId) : base(webComponentType)
     {
         BulletId = bulletId;
-        Atk = atk;
 
         Init();
     }
@@ -47,10 +48,25 @@ public class BulletGameObject : GameObject
             return;
         }
 
-        Transform.LocalPosition = new Vector2(
-            Transform.LocalPosition.X + (Speed * game.GameTime.ElapsedTime * Transform.Direction.X),
-            Transform.LocalPosition.Y);
+        var offsetPos = GetNextOffsetPos(game);
+        Transform.LocalPosition = new Vector2(Transform.LocalPosition.X + offsetPos.X, Transform.LocalPosition.Y + offsetPos.Y);
 
+    }
+
+    private Vector2 GetNextOffsetPos(GameContext game)
+    {
+        // 斜率
+        var k = Utility.Maths.LinerEquation.CountK(Transform.Position, Target.Transform.Position);
+
+        // 距离
+        var d = Speed * game.GameTime.ElapsedTime;//* Transform.Direction.X;
+
+        // 当前点
+        var p1 = Transform.Position;
+
+        var p2 = Utility.Maths.LinerEquation.GetP2(k, d, p1);
+
+        return new Vector2(p2.X - Transform.Position.X, p2.Y - Transform.Position.Y) * Transform.Direction.X;
     }
 
     protected override void OnCollisionEnter(Collision collision)
