@@ -17,14 +17,14 @@ public class BulletManager : BaseComponent
 
     public BulletGameObject GetOrAddBulletGameObject(int bulletId, Vector2 direction, int atk, GameObject target)
     {
-        BulletGameObject bulletGameObject = new(typeof(Bullet), $"{bulletId}")
+        BulletGameObject bulletGameObject = new(typeof(Bullet), $"{bulletId}", target)
         {
             Speed = 200,
             Atk = atk,
-            Target = target,
         };
 
         bulletGameObject.Transform.Direction = direction;
+        bulletGameObject.Init();
 
         _bulletGameObjectList.Add(bulletGameObject);
 

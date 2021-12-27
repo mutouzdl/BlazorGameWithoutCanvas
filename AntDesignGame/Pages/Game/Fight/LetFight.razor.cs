@@ -46,8 +46,8 @@ public partial class LetFight : ComponentBase
             Tag = "hero",
         };
         heroGameObject.Transform.LocalPosition = new Vector2(100, 220);
-        heroGameObject.FightProperty.Atk = 135;
-        heroGameObject.FightProperty.AtkDelay = 3.5f;
+        heroGameObject.FightProperty.Atk = 15;
+        heroGameObject.FightProperty.AtkDelay = 1113.5f;
         heroGameObject.FightProperty.Def = 1;
         heroGameObject.FightProperty.HP = 100;
         heroGameObject.Init();
@@ -55,7 +55,7 @@ public partial class LetFight : ComponentBase
         gameContext.AddGameObject(heroGameObject);
 
         // 创建敌人
-        gameContext.AddGameObject(CreateMonster("monster", 400, 220, 50));
+        gameContext.AddGameObject(CreateMonster("monster", 400, 320, 350));
         gameContext.AddGameObject(CreateMonster("monster", 500, 320, 250));
         gameContext.AddGameObject(CreateMonster("monster", 800, 520, 150));
 
@@ -78,7 +78,7 @@ public partial class LetFight : ComponentBase
         monsterGameObject.Transform.LocalPosition = new Vector2(x, y);
         monsterGameObject.Transform.Direction = Vector2.UnitX * -1;
         monsterGameObject.FightProperty.Atk = 3;
-        monsterGameObject.FightProperty.AtkDelay = 11112;
+        monsterGameObject.FightProperty.AtkDelay = 2;
         monsterGameObject.FightProperty.Def = 1;
         monsterGameObject.FightProperty.HP = hp;
         monsterGameObject.Init();
