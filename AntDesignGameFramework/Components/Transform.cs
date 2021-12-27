@@ -71,16 +71,27 @@ public class Transform : BaseComponent
     public Size Size { get; set; } = Size.Empty;
 
     public Transform Parent { get; private set; }
-    public RectTransform Rect { get; private set; }
+
+    private RectTransform? _rect = null;
+    public RectTransform Rect
+    {
+        get
+        {
+            if (_rect == null)
+            {
+                _rect = GetRenderRect();
+            }
+
+            return (RectTransform)_rect;
+
+        }
+        private set
+        {
+            _rect = value;
+        }
+    }
 
     private List<GameObject> _children = new();
-
-    public Rectangle BoundingBox => new Rectangle()
-    {
-        Size = Size,
-        X = (int)Position.X,
-        Y = (int)Position.Y,
-    };
 
     public Transform(GameObject owner) : base(owner)
     {

@@ -47,9 +47,11 @@ public partial class LetFight : ComponentBase
         };
         heroGameObject.Transform.LocalPosition = new Vector2(100, 220);
         heroGameObject.FightProperty.Atk = 15;
-        heroGameObject.FightProperty.AtkDelay = 1113.5f;
+        heroGameObject.FightProperty.AtkRange = 800;
+        heroGameObject.FightProperty.AtkDelay = 3.5f;
         heroGameObject.FightProperty.Def = 1;
         heroGameObject.FightProperty.HP = 100;
+        heroGameObject.FightProperty.MoveSpeed = 10;
         heroGameObject.Init();
 
         gameContext.AddGameObject(heroGameObject);
@@ -78,9 +80,11 @@ public partial class LetFight : ComponentBase
         monsterGameObject.Transform.LocalPosition = new Vector2(x, y);
         monsterGameObject.Transform.Direction = Vector2.UnitX * -1;
         monsterGameObject.FightProperty.Atk = 3;
+        monsterGameObject.FightProperty.AtkRange = 250;
         monsterGameObject.FightProperty.AtkDelay = 2;
         monsterGameObject.FightProperty.Def = 1;
         monsterGameObject.FightProperty.HP = hp;
+        monsterGameObject.FightProperty.MoveSpeed = 20;
         monsterGameObject.Init();
 
         Console.WriteLine($"创建怪物，UID:{monsterGameObject.Uid} Tag:{monsterGameObject.Tag}/{tag}");

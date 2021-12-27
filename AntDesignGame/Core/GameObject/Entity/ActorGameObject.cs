@@ -21,6 +21,7 @@ public class ActorGameObject : GameObject
 
     private PropertyBarGameObject _propertyBarGameObject;
     private BulletManager _bulletManager;
+    private LinerMoveComponent _linerMoveComponent;
 
     private double _timeCounter = 3;
 
@@ -32,6 +33,7 @@ public class ActorGameObject : GameObject
     {
         Transform.Size = new Size(64, 64);
 
+        // 血量组件
         _propertyBarGameObject = new(typeof(PropertyBar));
 
         _propertyBarGameObject.Transform.Pivot = new Vector2(0.5f, 1);
@@ -44,15 +46,22 @@ public class ActorGameObject : GameObject
 
         Transform.AddChild(_propertyBarGameObject);
 
+        // 碰撞组件
         var boundingBox = new BoundingBox(this);
         boundingBox.SetSize(Transform.Size);
         AddComponent(boundingBox);
 
+        // 子弹管理器组件
         _bulletManager = new BulletManager();
         AddComponent(_bulletManager);
 
-        if (Tag == "hero")
-            _timeCounter = FightProperty.AtkDelay;
+        // 移动组件
+        _linerMoveComponent = new LinerMoveComponent(this, null, Transform.Direction, FightProperty.MoveSpeed, true);
+        _linerMoveComponent.Pause();
+        AddComponent(_linerMoveComponent);
+
+        // 初次攻击不需要冷却
+        _timeCounter = FightProperty.AtkDelay;
 
         State = EnumActorState.Stand;
     }
@@ -102,8 +111,12 @@ public class ActorGameObject : GameObject
 
                 if (targets.Length == 0)
                 {
+                    _linerMoveComponent.Resume();
                     return;
                 }
+
+                // 攻击时暂停移动
+                _linerMoveComponent.Pause();
 
                 _timeCounter = 0;
 
@@ -132,70 +145,73 @@ public class ActorGameObject : GameObject
                 continue;
             }
 
-            var tag = actorGameObj.Tag;
-            if ((Tag == Const.Tags.Hero && tag == Const.Tags.Monster)
-                || Tag == Const.Tags.Monster && tag == Const.Tags.Hero)
+            if (RelationUtility.GetRelation(actorGameObj.Tag, Tag) != EnumActorRelation.敌对)
             {
-                objs.Add(actorGameObj);
+                continue;
             }
+
+            // 距离以水平方向计算
+            var distance = Math.Abs(actorGameObj.Transform.Position.X - Transform.Position.X);
+
+            if (distance >= FightProperty.AtkRange)
+            {
+                continue;
+            }
+
+            objs.Add(actorGameObj);
         }
 
         return objs.ToArray();
     }
 
-    protected override void OnCollisionEnter(Collision collision)
+    public void ReveiveHurt(int value)
     {
         if (IsDead)
         {
             return;
         }
 
-        if (collision.GameObject is BulletGameObject && collision.GameObject.Transform.Parent.Owner.Uid != this.Uid)
+        FightProperty.HP -= value - FightProperty.Def;
+
+        if (FightProperty.HP <= 0)
         {
-            var bulletGameObject = (BulletGameObject)collision.GameObject;
+            FightProperty.HP = 0;
+            IsDead = true;
+        }
 
-            FightProperty.HP -= bulletGameObject.Atk - FightProperty.Def;
+        _propertyBarGameObject.CurrentValue = FightProperty.HP;
 
-            if (FightProperty.HP <= 0)
-            {
-                FightProperty.HP = 0;
-                IsDead = true;
-            }
-
-            _propertyBarGameObject.CurrentValue = FightProperty.HP;
-
-            if (IsDead)
-            {
-                Dead();
-            }
-            else
-            {
-                ReceiveHurt();
-            }
+        if (IsDead)
+        {
+            Dead();
+        }
+        else
+        {
+            Hurt();
         }
     }
 
-    public async void Stand()
+    private async void Stand()
     {
         State = EnumActorState.Stand;
     }
 
-    public async void Attack()
+    private async void Attack()
     {
         State = EnumActorState.Attack;
     }
 
-    public async void ReceiveHurt()
+    private async void Hurt()
     {
         State = EnumActorState.Hurt;
     }
 
-    public async void Dead()
+    private async void Dead()
     {
         State = EnumActorState.Dead;
     }
 
-    public async void Resurgence()
+    private async void Resurgence()
     {
         Stand();
     }

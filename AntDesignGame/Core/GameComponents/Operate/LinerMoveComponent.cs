@@ -11,6 +11,7 @@ public class LinerMoveComponent : BaseComponent
     public Vector2 Direction { get; set; }
     public float Speed { get; set; }
     public bool AutoDestroy { get; set; }
+    public bool IsMoving { get; private set; } = true;
 
     /// <summary>
     /// 
@@ -39,9 +40,19 @@ public class LinerMoveComponent : BaseComponent
             ((Vector2)target).Y - owner.Transform.Position.Y > 0 ? 1 : -1);
     }
 
+    public void Pause()
+    {
+        IsMoving = false;
+    }
+
+    public void Resume()
+    {
+        IsMoving = true;
+    }
+
     public override async ValueTask Update(GameContext game)
     {
-        if (Owner.IsDestroy)
+        if (Owner.IsDestroy || IsMoving == false)
         {
             return;
         }

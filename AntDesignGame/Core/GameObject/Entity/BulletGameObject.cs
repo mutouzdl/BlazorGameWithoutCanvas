@@ -42,11 +42,9 @@ public class BulletGameObject : GameObject
             return;
         }
 
-        if (collision.GameObject is ActorGameObject
-            && collision.GameObject.Uid != this.Transform.Parent.Owner.Uid
-            && RelationUtility.GetRelation(collision.GameObject.Tag, Transform.Parent.Owner.Tag) == EnumActorRelation.敌对
-            )
+        if (collision.GameObject.Uid == Target.Uid)
         {
+            ((ActorGameObject)Target).ReveiveHurt(Atk);
             Destroy();
         }
     }
