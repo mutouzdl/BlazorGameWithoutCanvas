@@ -43,7 +43,7 @@ public partial class LetFight : ComponentBase
         {
             ActorId = "1064020302",
             ImageMirror = true,
-            Tag = "hero",
+            Tag = Const.Tags.Hero,
         };
         heroGameObject.Transform.LocalPosition = new Vector2(100, 220);
         heroGameObject.FightProperty.Atk = 15;
@@ -55,9 +55,9 @@ public partial class LetFight : ComponentBase
         gameContext.AddGameObject(heroGameObject);
 
         // 创建敌人
-        gameContext.AddGameObject(CreateMonster("monster", 400, 320, 350));
-        gameContext.AddGameObject(CreateMonster("monster", 500, 320, 250));
-        gameContext.AddGameObject(CreateMonster("monster", 800, 520, 150));
+        gameContext.AddGameObject(CreateMonster(Const.Tags.Monster, 400, 320, 350));
+        gameContext.AddGameObject(CreateMonster(Const.Tags.Monster, 500, 320, 250));
+        gameContext.AddGameObject(CreateMonster(Const.Tags.Monster, 800, 520, 150));
 
         _gameWorld.SetGameContext(gameContext);
         _gameWorld.Refresh();

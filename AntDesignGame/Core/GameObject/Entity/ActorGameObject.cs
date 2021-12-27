@@ -132,9 +132,9 @@ public class ActorGameObject : GameObject
                 continue;
             }
 
-            var tag = actorGameObj.Tag?.ToLower();
-            if ((Tag == "hero" && tag == "monster")
-                || Tag == "monster" && tag == "hero")
+            var tag = actorGameObj.Tag;
+            if ((Tag == Const.Tags.Hero && tag == Const.Tags.Monster)
+                || Tag == Const.Tags.Monster && tag == Const.Tags.Hero)
             {
                 objs.Add(actorGameObj);
             }
