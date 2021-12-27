@@ -12,8 +12,6 @@ public partial class LetFight : ComponentBase
     private GameLoop _gameLoop;
     private GameWorld _gameWorld;
 
-    private float _fps = 0;
-
     [Inject]
     private IDomEventListener DomEventListener { get; set; }
     [Inject]
@@ -39,7 +37,7 @@ public partial class LetFight : ComponentBase
         Global.DomEventListener = DomEventListener;
         Global.JSRuntime = JSRuntime;
 
-        // 创建英雄
+        // 创建英雄（数值写死，实际中应该读取配置文件）
         ActorGameObject heroGameObject = new ActorGameObject(typeof(Actor))
         {
             ActorId = "1064020302",
@@ -58,7 +56,7 @@ public partial class LetFight : ComponentBase
 
         gameContext.AddGameObject(heroGameObject);
 
-        // 创建敌人
+        // 创建敌人（数值写死，实际中应该读取配置文件）
         gameContext.AddGameObject(CreateMonster(Const.Tags.Monster, 400, 320, 350));
         gameContext.AddGameObject(CreateMonster(Const.Tags.Monster, 500, 320, 250));
         gameContext.AddGameObject(CreateMonster(Const.Tags.Monster, 800, 520, 150));
@@ -66,14 +64,13 @@ public partial class LetFight : ComponentBase
         _gameWorld.SetGameContext(gameContext);
         _gameWorld.Refresh();
 
-        _gameLoop = new();
+        _gameLoop = new(60);
         _gameLoop.Logic += Logic;
         _gameLoop.Start();
     }
 
     private ActorGameObject CreateMonster(string tag, float x, float y, int hp)
     {
-
         ActorGameObject monsterGameObject = new ActorGameObject(typeof(Actor))
         {
             ActorId = "1019010301",
@@ -90,18 +87,13 @@ public partial class LetFight : ComponentBase
         monsterGameObject.FightProperty.MoveSpeed = 20;
         monsterGameObject.Init();
 
-        Console.WriteLine($"创建怪物，UID:{monsterGameObject.Uid} Tag:{monsterGameObject.Tag}/{tag}");
         return monsterGameObject;
     }
 
     private async Task Logic(object sender, GameLoopLogicEventArgs e)
     {
-        _fps = 1.0f / e.ElapsedTime;
-
         await _gameWorld.GameContext.Step(e.ElapsedTime);
 
         _gameWorld.Refresh();
-
-        StateHasChanged();
     }
 }

@@ -4,13 +4,18 @@ namespace AntDesignGameFramework;
 
 public class GameLoop
 {
-    public const int FPS = 30;
-    public int FPS_DELAY => Convert.ToInt32(1000.0 / FPS);
-
     private bool _isRunning = false;
     private decimal _timeCounter = 0;
+    private int _fps;
+    private int _fpsDelay;
 
     public event Func<object, GameLoopLogicEventArgs, Task> Logic;
+
+    public GameLoop(int fps = 30)
+    {
+        _fps = fps;
+        _fpsDelay = Convert.ToInt32(1000.0 / _fps);
+    }
 
     public async void Start()
     {
@@ -43,7 +48,7 @@ public class GameLoop
 
             var logicCostMilliseconds = stopWatch.Elapsed.TotalMilliseconds;
 
-            var d = Convert.ToInt32(FPS_DELAY - logicCostMilliseconds);
+            var d = Convert.ToInt32(_fpsDelay - logicCostMilliseconds);
             if (d <= 1) d = 1;
 
             await Task.Delay(d);

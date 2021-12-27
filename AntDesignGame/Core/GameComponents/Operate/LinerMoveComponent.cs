@@ -76,6 +76,12 @@ public class LinerMoveComponent : BaseComponent
 
     }
 
+    /// <summary>
+    /// 获取下一个目的坐标和当前坐标的偏移量
+    /// 本组件会控制物体延直线匀速前进
+    /// </summary>
+    /// <param name="game"></param>
+    /// <returns></returns>
     private Vector2 GetNextOffsetPos(GameContext game)
     {
         // 斜率
@@ -87,6 +93,7 @@ public class LinerMoveComponent : BaseComponent
         // 当前点
         var p1 = Owner.Transform.Position;
 
+        // 目标点
         var p2 = Utility.Maths.LinerEquation.GetP2(k, d, p1);
 
         return new Vector2(p2.X - Owner.Transform.Position.X, p2.Y - Owner.Transform.Position.Y) * Direction.X;

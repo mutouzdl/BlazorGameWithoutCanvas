@@ -2,6 +2,9 @@
 
 @if (GameContext != null)
 {
+	<span>
+		FPS：@(Math.Round(1f/GameContext.GameTime.ElapsedTime, 2))
+	</span>
 	foreach(var gameObject in GameContext.GameObjects)
 	{
 		<RenderGameWordObject @key=@gameObject.Uid @ref="_renderGameWorldObject" GameObject="@gameObject" />
