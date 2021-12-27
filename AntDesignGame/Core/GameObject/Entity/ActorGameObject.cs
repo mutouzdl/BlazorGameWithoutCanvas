@@ -13,10 +13,19 @@ public class ActorGameObject : GameObject
     /// 图片是否镜像翻转
     /// </summary>
     public bool ImageMirror { get; set; } = false;
+    /// <summary>
+    /// 是否死亡
+    /// </summary>
     public bool IsDead { get; private set; } = false;
 
+    /// <summary>
+    /// 战斗属性
+    /// </summary>
     public FightProperty FightProperty { get; private set; } = new FightProperty();
 
+    /// <summary>
+    /// 角色动画状态
+    /// </summary>
     public EnumActorState State { get; private set; } = EnumActorState.NotInit;
 
     private PropertyBarGameObject _propertyBarGameObject;
@@ -35,7 +44,6 @@ public class ActorGameObject : GameObject
 
         // 血量组件
         _propertyBarGameObject = new(typeof(PropertyBar));
-
         _propertyBarGameObject.Transform.Pivot = new Vector2(0.5f, 1);
         _propertyBarGameObject.Transform.AnchorMin = new Vector2(0.5f, 0);
         _propertyBarGameObject.Transform.AnchorMax = new Vector2(0.5f, 0);
@@ -111,6 +119,7 @@ public class ActorGameObject : GameObject
 
                 if (targets.Length == 0)
                 {
+                    // 没有攻击对象时，向前移动
                     _linerMoveComponent.Resume();
                     return;
                 }
@@ -161,7 +170,11 @@ public class ActorGameObject : GameObject
             objs.Add(actorGameObj);
         }
 
-        return objs.ToArray();
+        // 取距离最近的对象
+        return objs
+            .OrderBy(t => Math.Abs(t.Transform.Position.X - Transform.Position.X))
+            .Take(FightProperty.AtkNum)
+            .ToArray();
     }
 
     public void ReveiveHurt(int value)

@@ -5,6 +5,9 @@ using AntDesignGameFramework.Utility;
 
 namespace AntDesignGame;
 
+/// <summary>
+/// 直线移动组件
+/// </summary>
 public class LinerMoveComponent : BaseComponent
 {
     public Vector2 Target { get; set; }

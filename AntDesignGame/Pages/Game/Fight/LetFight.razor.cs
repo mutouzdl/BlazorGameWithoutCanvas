@@ -49,6 +49,7 @@ public partial class LetFight : ComponentBase
         heroGameObject.Transform.LocalPosition = new Vector2(100, 220);
         heroGameObject.FightProperty.Atk = 15;
         heroGameObject.FightProperty.AtkRange = 800;
+        heroGameObject.FightProperty.AtkNum = 2;
         heroGameObject.FightProperty.AtkDelay = 3.5f;
         heroGameObject.FightProperty.Def = 1;
         heroGameObject.FightProperty.HP = 100;
@@ -81,6 +82,7 @@ public partial class LetFight : ComponentBase
         monsterGameObject.Transform.LocalPosition = new Vector2(x, y);
         monsterGameObject.Transform.Direction = Vector2.UnitX * -1;
         monsterGameObject.FightProperty.Atk = 3;
+        monsterGameObject.FightProperty.AtkNum = 1;
         monsterGameObject.FightProperty.AtkRange = 250;
         monsterGameObject.FightProperty.AtkDelay = 2;
         monsterGameObject.FightProperty.Def = 1;
