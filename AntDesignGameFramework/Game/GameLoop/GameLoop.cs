@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace AntDesignGame;
+namespace AntDesignGameFramework;
 
 public class GameLoop
 {

@@ -4,7 +4,6 @@
 {
 	foreach(var gameObject in GameContext.GameObjects)
 	{
-		<div>Tag:@(gameObject.Tag)</div>
 		<RenderGameWordObject @key=@gameObject.Uid @ref="_renderGameWorldObject" GameObject="@gameObject" />
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace AntDesignGame;
+﻿namespace AntDesignGameFramework;
 
 
 public class GameLoopLogicEventArgs : EventArgs

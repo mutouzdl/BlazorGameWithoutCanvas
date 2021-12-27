@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using AntDesign.JsInterop;
+using AntDesignGameFramework;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
