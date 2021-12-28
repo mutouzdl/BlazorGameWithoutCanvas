@@ -17,10 +17,13 @@ public abstract class GameContext
         // 移除已销毁的对象
         GameObjects.RemoveAll(t => t.IsDestroy);
 
+        // 调用GameObject的Update函数
         await Update();
 
+        // 碰撞检测
         CheckCollision();
 
+        // 更新对象的渲染规格
         UpdateGameObjectRenderRect();
     }
 
