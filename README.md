@@ -13,11 +13,11 @@
 
 [[BlazorGameWithoutCanvas]0.前言：基于Blazor开发游戏，并且不使用Canvas](http://www.benmutou.com/archives/2926)
 
-[[BlazorGameWithoutCanvas]1. 游戏循环](http://www.benmutou.com/2927)
+[[BlazorGameWithoutCanvas]1. 游戏循环](http://www.benmutou.com/archives/2927)
 
-[[BlazorGameWithoutCanvas]2.游戏对象和组件渲染](http://www.benmutou.com/2930)
+[[BlazorGameWithoutCanvas]2.游戏对象和组件渲染](http://www.benmutou.com/archives/2930)
 
-[[BlazorGameWithoutCanvas]3. 解决坐标系的问题](http://www.benmutou.com/2931)
+[[BlazorGameWithoutCanvas]3. 解决坐标系的问题](http://www.benmutou.com/archives/2931)
 
 
 # Demo预览
